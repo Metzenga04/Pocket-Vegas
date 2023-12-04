@@ -36,7 +36,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void gotoMainActivity() {
-        Intent intent = new Intent(getApplicationContext(),SignInPage.class);
+        Intent intent = new Intent(getApplicationContext(), SignUpPage.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
