@@ -46,6 +46,8 @@
                 android:textStyle="bold" />
 
             <EditText
+
+
                 android:id="@+id/emailInputIn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -57,11 +59,12 @@
                 android:hint="Email"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/black"
-                android:textColorHint="@color/material_dynamic_neutral60"
+                android:textColorHighlight="@color/cardview_dark_background"
                 android:textSize="15sp" />
 
             <EditText
+
+
                 android:id="@+id/passInputIn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -78,7 +81,7 @@
                 android:textSize="15sp" />
 
             <Button
-                android:id="@+id/signBtn"
+                android:id="@+id/btnSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
@@ -94,54 +97,65 @@
 
     <TextView
         android:id="@+id/signupPLACEHOLDER"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="600dp"
-        android:text="Don´t have an account?                 "
+        android:layout_marginTop="510dp"
+        android:layout_marginEnd="85dp"
+        android:text="Don´t have an account? "
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.541"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="417dp"
+        android:layout_height="195dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/signup"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginStart="205dp"
+        android:layout_marginTop="503dp"
         android:background="?android:attr/panelBackground"
         android:text="Register"
         android:textColor="@color/design_default_color_primary_variant"
-        android:textSize="17sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-    <ImageView
-        android:id="@+id/imageBJ"
-        android:layout_width="413dp"
-        android:layout_height="190dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/iconeprincipal_da_app" />
+        app:layout_constraintVertical_bias="0.511" />
 
     <Switch
         android:id="@+id/switchPT"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_marginStart="322dp"
         android:layout_marginTop="42dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="15dp"
         android:text="PT"
         android:textAllCaps="true"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+        app:layout_constraintVertical_bias="0.861" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

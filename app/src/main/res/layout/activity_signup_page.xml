@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#eeeeee"
     tools:context=".SignUpPage">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -35,9 +37,10 @@
                 android:id="@+id/signupTEXT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:text="SIGN UP"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="#0d0f13"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -47,6 +50,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/custom_edit_text"
+                android:backgroundTint="#d4d4d4"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:hint="Name"
@@ -61,6 +65,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/custom_edit_text"
+                android:backgroundTint="#d4d4d4"
                 android:drawableLeft="@drawable/baseline_email_24"
                 android:drawablePadding="8dp"
                 android:hint="E-mail"
@@ -75,6 +80,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/custom_edit_text"
+                android:backgroundTint="#d4d4d4"
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:hint="Password"
@@ -90,6 +96,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/custom_edit_text"
+                android:backgroundTint="#d4d4d4"
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:hint="Re-Password"
@@ -104,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="#0d0f13"
                 android:text="SIGN UP"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -113,4 +120,17 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/imageSignUp"
+        android:layout_width="414dp"
+        android:layout_height="0dp"
+        android:src="@drawable/signup"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/signup" />
 </androidx.constraintlayout.widget.ConstraintLayout>

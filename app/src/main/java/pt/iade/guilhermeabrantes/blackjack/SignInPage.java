@@ -37,14 +37,14 @@ public class SignInPage extends AppCompatActivity {
             }
         });
 
-        btnSignIn = (Button) findViewById(R.id.btnRegister);
+        btnSignIn = (Button) findViewById(R.id.btnSignIn);
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!validateEmail(emailInputIn.getText().toString())) {
                     emailInputIn.setError("Invalid Email");
                 } else if (!validatePassword(passwordInputIn.getText().toString())) {
-                    passwordInputIn.setError("Invalid Password!\n" + "At least 9 letters");
+                    passwordInputIn.setError("Invalid Password!\n" + "At least 9 characters");
                 } else {
                     startActivity(new Intent(SignInPage.this, FrontPage.class));
                 }
@@ -67,7 +67,6 @@ public class SignInPage extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
-
     }
 
     protected Boolean validatePassword(String password){
@@ -77,6 +76,4 @@ public class SignInPage extends AppCompatActivity {
             return false;
         }
     }
-
-
 }
