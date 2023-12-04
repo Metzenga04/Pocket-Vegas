@@ -18,7 +18,6 @@ public class SignUpPage extends AppCompatActivity {
     private EditText emailInputUp;
     private EditText passwordInputUp;
     private EditText repassInputUp;
-
     private String name;
 
 

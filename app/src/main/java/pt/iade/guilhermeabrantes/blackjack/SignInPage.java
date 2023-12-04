@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class SignInPage extends AppCompatActivity {
 
-    private Button btnSignUp;
-    private Button btnLogin;
+    private Button btnRegister;
+    private Button btnSignIn;
     private EditText emailInputIn;
     private EditText passwordInputIn;
 
@@ -28,8 +28,8 @@ public class SignInPage extends AppCompatActivity {
         emailInputIn = (EditText) findViewById(R.id.emailInputIn);
         passwordInputIn = (EditText) findViewById(R.id.passInputIn);
 
-        btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SignInPage.this, SignUpPage.class);
@@ -37,8 +37,8 @@ public class SignInPage extends AppCompatActivity {
             }
         });
 
-        btnLogin = (Button) findViewById(R.id.btnSignUp);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnSignIn = (Button) findViewById(R.id.btnRegister);
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!validateEmail(emailInputIn.getText().toString())) {
