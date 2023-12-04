@@ -46,6 +46,8 @@ public class SignUpPage extends AppCompatActivity {
                     passwordInputUp.setError("Invalid Password!\n" +
                             "At least 9 letters");
                     passwordInputUp.requestFocus();
+                }else if (!validateRepassword(repassInputUp.getText().toString())) {
+                    repassInputUp.setError("The password does not match!\n");
                 } else {
                     startActivity(new Intent(SignUpPage.this, SignInPage.class));
                 }
@@ -76,6 +78,13 @@ public class SignUpPage extends AppCompatActivity {
             return true;
         } else {
             return false;
+        }
+    }
+    protected Boolean validateRepassword(String repassword) {
+        if (!(repassword.matches(passwordInputUp.toString()))) {
+            return false;
+        } else {
+            return true;
         }
     }
     protected Boolean validateName(){
