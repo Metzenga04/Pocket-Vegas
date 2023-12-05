@@ -43,9 +43,9 @@ public class SignUpPage extends AppCompatActivity {
                     emailInputUp.requestFocus();
                 } else if (!validatePassword(passwordInputUp.getText().toString())) {
                     passwordInputUp.setError("Invalid Password!\n" +
-                            "At least 9 letters");
+                            "At least 9 characters");
                     passwordInputUp.requestFocus();
-                }else if (!validateRepassword(repassInputUp.getText().toString())) {
+                }else if (!validateRepassword(repassInputUp.getText().toString(), passwordInputUp.getText().toString())) {
                     repassInputUp.setError("The password does not match!\n");
                 } else {
                     startActivity(new Intent(SignUpPage.this, SignInPage.class));
@@ -79,8 +79,8 @@ public class SignUpPage extends AppCompatActivity {
             return false;
         }
     }
-    protected Boolean validateRepassword(String repassword) {
-        if (!(repassword.matches(passwordInputUp.toString()))) {
+    protected Boolean validateRepassword(String repassword, String password) {
+        if (!repassword.equals(password)) {
             return false;
         } else {
             return true;

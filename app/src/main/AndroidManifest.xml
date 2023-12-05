@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlackJack"
         tools:targetApi="31">
-
+        <activity
+            android:name=".TheGame"
+            android:exported="false" />
         <activity
             android:name=".SignInPage"
             android:screenOrientation="portrait" />
