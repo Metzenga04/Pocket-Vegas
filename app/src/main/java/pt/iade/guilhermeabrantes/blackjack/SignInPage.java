@@ -27,7 +27,6 @@ public class SignInPage extends AppCompatActivity {
 
         emailInputIn = (EditText) findViewById(R.id.emailInputIn);
         passwordInputIn = (EditText) findViewById(R.id.passInputIn);
-
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

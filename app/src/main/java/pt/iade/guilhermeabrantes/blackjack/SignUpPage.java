@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 public class SignUpPage extends AppCompatActivity {
 
     private Button btnSignUp;
+    private ImageButton btnBack;
     private EditText nameInputUp;
     private EditText emailInputUp;
     private EditText passwordInputUp;
@@ -27,6 +29,7 @@ public class SignUpPage extends AppCompatActivity {
         setContentView(R.layout.activity_signup_page);
 
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
+        btnBack = (ImageButton) findViewById(R.id.btnBack);
         nameInputUp = (EditText) findViewById(R.id.nameInputUp);
         emailInputUp = (EditText) findViewById(R.id.emailInputUp);
         passwordInputUp = (EditText) findViewById(R.id.passInputUp);
@@ -45,11 +48,17 @@ public class SignUpPage extends AppCompatActivity {
                     passwordInputUp.setError("Invalid Password!\n" +
                             "At least 9 characters");
                     passwordInputUp.requestFocus();
-                }else if (!validateRepassword(repassInputUp.getText().toString(), passwordInputUp.getText().toString())) {
+                } else if (!validateRepassword(repassInputUp.getText().toString(), passwordInputUp.getText().toString())) {
                     repassInputUp.setError("The password does not match!\n");
                 } else {
                     startActivity(new Intent(SignUpPage.this, SignInPage.class));
                 }
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpPage.this, SignInPage.class);
             }
         });
     }
