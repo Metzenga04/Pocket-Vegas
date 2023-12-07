@@ -31,7 +31,7 @@ public class FrontPage extends AppCompatActivity {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, TheGame.class);
+                Intent intent = new Intent(FrontPage.this, BlackJack.class);
                 startActivity(intent);
             }
         });
