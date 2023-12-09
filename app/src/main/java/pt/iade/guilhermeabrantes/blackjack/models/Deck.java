@@ -5,36 +5,35 @@ import java.util.List;
 import java.util.Random;
 
 public class Deck {
-    private List<Card> cards;
+    private List<Integer> cartas;
+
     public Deck() {
-        cards = new ArrayList<>();
-        initializeDeck();
-        shuffle();
+        inicializarBaralho();
+        embaralharBaralho();
     }
-    private void initializeDeck() {
-        String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
+
+    private void inicializarBaralho() {
+        cartas = new ArrayList<>();
+        String[] suits = {"H", "D", "C", "S"};
         String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
 
-        for (String suit : suits) {
-            for (String rank : ranks) {
-                cards.add(new Card(suit, rank));
+        for (int i = 0; i < 2; i++) {
+            for (int valor = 2; valor <= 14; valor++) {
+                cartas.add(valor);
             }
         }
     }
 
-    public void shuffle() {
-        Collections.shuffle(cards);
+    public void embaralharBaralho() {
+        Collections.shuffle(cartas);
     }
-    public Card drawCard() {
-        if (cards.isEmpty()) {
-            return null;
+    public int drawCard(){
+        if (cartas.isEmpty()) {
+            // Se o baralho estiver vazio, recria e embaralha
+            inicializarBaralho();
+            embaralharBaralho();
         }
-        Card drawnCard = cards.remove(cards.size() - 1);
-
-        return drawnCard;
+        // Remove e retorna a carta do topo do baralho
+        return cartas.remove(0);
     }
-    public boolean isEmpty() {
-        // Verifique se o baralho está vazio
-        return cards.isEmpty();
-    }
-    }
+}
