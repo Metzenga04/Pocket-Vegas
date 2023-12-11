@@ -6,18 +6,31 @@ import java.util.List;
 import java.util.Random;
 public class Card {
     public final static int ACE = 1;
-    public final static int Two = 2;
+    public final static int ACE2 =14 ;
+    public final static int TWO = 2;
+    public final static int TWO2 = 15;
     public final static int THREE = 3;
+    public final static int THREE2 = 16;
     public final static int FOUR = 4;
+    public final static int FOUR2 = 17;
     public final static int FIVE = 5;
+    public final static int FIVE2 = 18;
     public final static int SIX = 6;
+    public final static int SIX2 =19;
     public final static int SEVEN = 7;
+    public final static int SEVEN2 =20;
     public final static int EIGHT = 8;
+    public final static int EIGHT2 = 21;
     public final static int NINE = 9;
+    public final static int NINE2 = 22;
     public final static int TEN = 10;
+    public final static int TEN2 =23;
     public final static int JACK = 11;
+    public final static int JACK2 = 24;
     public final static int QUEEN = 12;
+    public final static int QUEEN2 = 25;
     public final static int KING = 13;
+    public final static int KING2 = 26;
 
     //SUITS
     public final static int DIAMONDS = 1;
@@ -35,71 +48,123 @@ public class Card {
 
         switch (tempRank) {
             case ACE:
-                this.nameOfCard = "aceof";
+                this.nameOfCard = "asde";
                 this.rank = 11;
                 break;
-            case Two:
-                this.nameOfCard = "twoof";
+            case ACE2:
+                this.nameOfCard ="asde2";
+                this.rank = 11;
+                break;
+            case TWO:
+                this.nameOfCard = "doisde";
+                this.rank = 2;
+                break;
+            case TWO2:
+                this.nameOfCard ="doisde2";
                 this.rank = 2;
                 break;
             case THREE:
-                this.nameOfCard = "threeof";
+                this.nameOfCard = "tresde";
                 this.rank = 3;
                 break;
+            case THREE2:
+                this.nameOfCard = "tresde2";
+                this.rank= 3;
+                break;
             case FOUR:
-                this.nameOfCard = "fourof";
+                this.nameOfCard = "quatrode";
+                this.rank = 4;
+                break;
+            case FOUR2:
+                this.nameOfCard = "quatrode2";
                 this.rank = 4;
                 break;
             case FIVE:
-                this.nameOfCard = "fiveof";
+                this.nameOfCard = "cincode";
+                this.rank = 5;
+                break;
+            case FIVE2:
+                this.nameOfCard = "cincode2";
                 this.rank = 5;
                 break;
             case SIX:
-                this.nameOfCard = "sixof";
+                this.nameOfCard = "seisde";
+                this.rank = 6;
+                break;
+            case SIX2:
+                this.nameOfCard = "seisde2";
                 this.rank = 6;
                 break;
             case SEVEN:
-                this.nameOfCard = "sevenof";
+                this.nameOfCard = "setede";
+                this.rank = 7;
+                break;
+            case SEVEN2:
+                this.nameOfCard = "setede2";
                 this.rank = 7;
                 break;
             case EIGHT:
-                this.nameOfCard = "eightof";
+                this.nameOfCard = "oitode";
+                this.rank = 8;
+                break;
+            case EIGHT2:
+                this.nameOfCard = "oitode2";
                 this.rank = 8;
                 break;
             case NINE:
-                this.nameOfCard = "nineof";
+                this.nameOfCard = "novede";
+                this.rank = 9;
+                break;
+            case NINE2:
+                this.nameOfCard = "novede2";
                 this.rank = 9;
                 break;
             case TEN:
-                this.nameOfCard = "tenof";
+                this.nameOfCard = "dezde";
+                this.rank = 10;
+                break;
+            case TEN2:
+                this.nameOfCard = "dezde2";
                 this.rank = 10;
                 break;
             case JACK:
-                this.nameOfCard = "jackof";
+                this.nameOfCard = "valetede";
+                this.rank = 10;
+                break;
+            case JACK2:
+                this.nameOfCard = "valetede2";
                 this.rank = 10;
                 break;
             case QUEEN:
-                this.nameOfCard = "queenof";
+                this.nameOfCard = "damade";
                 this.rank = 10;
                 break;
+            case QUEEN2:
+                this.nameOfCard = "damade2";
+                this.rank =10;
+                break;
             case KING:
-                this.nameOfCard = "kingof";
+                this.nameOfCard = "reide";
+                this.rank = 10;
+                break;
+            case KING2:
+                this.nameOfCard = "reide2";
                 this.rank = 10;
                 break;
 
         }
         switch (this.suit) {
             case DIAMONDS:
-                this.nameOfCard = this.nameOfCard.concat("diamonds");
+                this.nameOfCard = this.nameOfCard.concat("ouros");
                 break;
             case CLUBS:
-                this.nameOfCard = this.nameOfCard.concat("clubs");
+                this.nameOfCard = this.nameOfCard.concat("paus");
                 break;
             case HEARTS:
-                this.nameOfCard = this.nameOfCard.concat("hearts");
+                this.nameOfCard = this.nameOfCard.concat("copas");
                 break;
             case SPADES:
-                this.nameOfCard = this.nameOfCard.concat("spades");
+                this.nameOfCard = this.nameOfCard.concat("espadas");
                 break;
         }
     }
