@@ -4,5 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="beje">#eeeeee</color>
     <color name="transparente">#00FFFFFF</color>
+    <color name="dourado">#F5EC9B</color>
+    <color name="amarelo">#F0E36D</color>
+    <color name="amarelo_claro">#FAF5C9</color>
     <color name="verde_escuro">#006400</color>
+    <color name="cinzento_claro">#E6E6E6</color>
 </resources>

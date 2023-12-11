@@ -4,18 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beje"
+    android:background="@color/black"
     tools:context=".SignUpPage">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:layout_margin="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="303dp"
         android:background="@drawable/custom_edit_text"
         android:orientation="vertical"
         app:cardCornerRadius="30dp"
@@ -123,29 +120,30 @@
 
     <ImageView
         android:id="@+id/imageSignUp"
-        android:layout_width="414dp"
-        android:layout_height="0dp"
-        android:src="@drawable/signup"
+        android:layout_width="417dp"
+        android:layout_height="195dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/logo_casino"
         app:layout_constraintBottom_toTopOf="@+id/cardSignUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/signup" />
+        app:srcCompat="@drawable/logo_casino" />
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="56dp"
+        android:layout_height="57dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#00FFFFFF"
+        android:backgroundTint="@color/black"
         android:scaleType="fitCenter"
         android:scaleX="1.5"
         android:scaleY="1.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardSignUp"
-        app:srcCompat="@drawable/back_arrow" />
+        app:srcCompat="@drawable/_40" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
