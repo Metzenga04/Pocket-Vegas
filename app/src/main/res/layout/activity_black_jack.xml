@@ -54,8 +54,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="215dp"
-        android:layout_height="100dp"
+        android:layout_width="250dp"
+        android:layout_height="110dp"
         android:layout_marginStart="100dp"
         android:layout_marginBottom="50dp"
         android:orientation="horizontal"
@@ -68,17 +68,17 @@
             android:layout_height="84dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:src="@drawable/cardback"
-            android:layout_marginBottom="0dp"/>
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/cardback" />
 
         <ImageView
             android:id="@+id/playerCard2"
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
-            android:src="@drawable/cardback"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"/>
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/cardback" />
 
         <ImageView
             android:id="@+id/playerCard3"
@@ -87,12 +87,30 @@
             android:layout_marginStart="-30dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp" />
+
+        <ImageView
+            android:id="@+id/playerCard4"
+            android:layout_width="72dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/playerCard5"
+            android:layout_width="72dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="215dp"
-        android:layout_height="100dp"
+        android:layout_width="250dp"
+        android:layout_height="110dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="50dp"
         android:orientation="horizontal"
@@ -104,18 +122,18 @@
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="0dp"
-            android:src="@drawable/cardback"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"/>
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/cardback" />
 
         <ImageView
             android:id="@+id/dealerCard2"
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
-            android:src="@drawable/cardback"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"/>
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/cardback" />
 
         <ImageView
             android:id="@+id/dealerCard3"
@@ -124,6 +142,24 @@
             android:layout_marginStart="-30dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp" />
+
+        <ImageView
+            android:id="@+id/dealerCard4"
+            android:layout_width="72dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="-30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/dealerCard5"
+            android:layout_width="72dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="-30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <Button
@@ -135,4 +171,26 @@
         android:text="Start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnExit" />
+
+    <TextView
+        android:id="@+id/scoreViewPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginEnd="236dp"
+        android:layout_marginBottom="265dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/scoreViewDealer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="242dp"
+        android:layout_marginEnd="230dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
