@@ -68,17 +68,17 @@
             android:layout_height="84dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/cardback"
+            android:layout_marginBottom="0dp"/>
 
         <ImageView
             android:id="@+id/playerCard2"
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
+            android:src="@drawable/cardback"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginBottom="0dp"/>
 
         <ImageView
             android:id="@+id/playerCard3"
@@ -86,8 +86,7 @@
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginBottom="0dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,18 +104,18 @@
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="0dp"
+            android:src="@drawable/cardback"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginEnd="0dp"/>
 
         <ImageView
             android:id="@+id/dealerCard2"
             android:layout_width="72dp"
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
+            android:src="@drawable/cardback"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginEnd="0dp"/>
 
         <ImageView
             android:id="@+id/dealerCard3"
@@ -124,8 +123,7 @@
             android:layout_height="84dp"
             android:layout_marginStart="-30dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginEnd="0dp" />
     </LinearLayout>
 
     <Button

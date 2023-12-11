@@ -48,10 +48,10 @@ public class WarGame extends AppCompatActivity {
         int rightCard = deck.drawCard();
 
         // Set card images based on drawn cards
-        int leftImage = getResources().getIdentifier( "card"+ leftCard, "drawable", getPackageName());
+        int leftImage = getResources().getIdentifier( "card" + leftCard, "drawable", getPackageName());
         iv_card_left.setImageResource(leftImage);
 
-        int rightImage = getResources().getIdentifier("card"+ rightCard, "drawable", getPackageName());
+        int rightImage = getResources().getIdentifier("card" + rightCard, "drawable", getPackageName());
         iv_card_right.setImageResource(rightImage);
 
         // Compare the drawn cards and update scores
@@ -62,11 +62,12 @@ public class WarGame extends AppCompatActivity {
         if (leftCard > rightCard) {
             leftscore++;
             tv_score_left.setText(String.valueOf(leftscore));
+            Toast.makeText(this, "Player1 win!", Toast.LENGTH_SHORT).show();
         } else if (leftCard < rightCard) {
             rightscore++;
             tv_score_right.setText(String.valueOf(rightscore));
+            Toast.makeText(this, "Player2 win!", Toast.LENGTH_SHORT).show();
         } else {
-            // It's a tie
             Toast.makeText(this, "Tie!", Toast.LENGTH_SHORT).show();
         }
     }
