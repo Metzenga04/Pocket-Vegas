@@ -48,10 +48,10 @@ public class WarGame extends AppCompatActivity {
         int rightCard = deck.drawCard();
 
         // Set card images based on drawn cards
-        int leftImage = getResources().getIdentifier("card" + leftCard, "drawable", getPackageName());
+        int leftImage = getResources().getIdentifier( "card"+ leftCard, "drawable", getPackageName());
         iv_card_left.setImageResource(leftImage);
 
-        int rightImage = getResources().getIdentifier("card" + rightCard, "drawable", getPackageName());
+        int rightImage = getResources().getIdentifier("card"+ rightCard, "drawable", getPackageName());
         iv_card_right.setImageResource(rightImage);
 
         // Compare the drawn cards and update scores

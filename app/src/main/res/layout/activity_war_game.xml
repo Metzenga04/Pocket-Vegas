@@ -51,22 +51,24 @@
         <TextView
             android:id="@+id/tv_score_left"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:textSize="32sp"
+            android:gravity="center"
             android:text="0"
             android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" />
+            android:textSize="32sp" />
 
         <TextView
             android:id="@+id/tv_score_right"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:textSize="32sp"
+            android:gravity="center"
             android:text="0"
             android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" />
+            android:textSize="32sp" />
     </LinearLayout>
 </RelativeLayout>
 
