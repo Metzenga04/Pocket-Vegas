@@ -41,6 +41,8 @@ public class BlackJack extends AppCompatActivity {
         ImageView dCard1 =findViewById(R.id.dealerCard);
         ImageView dCard2 =findViewById(R.id.dealerCard2);
         ImageView dCard3 =findViewById(R.id.dealerCard3);
+        ImageView dcard4 =findViewById(R.id.dealerCard4);
+        ImageView dcard5 =findViewById(R.id.dealerCard5);
 
         deal.setVisibility(View.VISIBLE);
         stand.setVisibility(View.GONE);
@@ -56,6 +58,8 @@ public class BlackJack extends AppCompatActivity {
         dCard1.setVisibility(View.GONE);
         dCard2.setVisibility(View.GONE);
         dCard3.setVisibility(View.GONE);
+        dcard4.setVisibility(View.GONE);
+        dcard5.setVisibility(View.GONE);
         split.setVisibility(View.GONE);
 
 
@@ -114,14 +118,19 @@ public class BlackJack extends AppCompatActivity {
                 dCard1.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 3).getName(),"drawable",getPackageName()));
 
                 dCard3.setVisibility(View.VISIBLE);
+
                 int sum =0;
                 for (int i = 0;i < dHand.size();i++){
                     sum+=dHand.get(i).getRank();
                     if (dHand.get(i).getRank()==11){
                     }
                 }
-                if (sum > 16){
-                    canHit =false;
+                if (sum < 17){
+                    dcard4.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable",getPackageName()));
+                    dcard4.setVisibility(View.VISIBLE);
+                }
+                else{
+                    canHit = false;
                 }
             }
             int pSum = 0;
@@ -288,6 +297,8 @@ public class BlackJack extends AppCompatActivity {
             dCard1.setVisibility(View.GONE);
             dCard2.setVisibility(View.GONE);
             dCard3.setVisibility(View.GONE);
+            dcard4.setVisibility(View.GONE);
+            dcard5.setVisibility(View.GONE);
         });
     }
 }

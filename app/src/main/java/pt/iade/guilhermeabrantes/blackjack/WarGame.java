@@ -62,11 +62,11 @@ public class WarGame extends AppCompatActivity {
         if (leftCard > rightCard) {
             leftscore++;
             tv_score_left.setText(String.valueOf(leftscore));
-            Toast.makeText(this, "Player1 win!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
         } else if (leftCard < rightCard) {
             rightscore++;
             tv_score_right.setText(String.valueOf(rightscore));
-            Toast.makeText(this, "Player2 win!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "you Lose!", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Tie!", Toast.LENGTH_SHORT).show();
         }

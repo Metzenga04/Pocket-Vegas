@@ -19,20 +19,18 @@ public class FrontPage extends AppCompatActivity {
         setContentView(R.layout.activity_front_page);
 
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
-        btnPlay = (Button) findViewById(R.id.btnPlay);
+        btnPlay = (Button) findViewById(R.id.btnBjPlay);
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, SignInPage.class);
-                startActivity(intent);
+                startActivity(new Intent(FrontPage.this,WarGame.class));
             }
         });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, BlackJack.class);
-                startActivity(intent);
+                startActivity(new Intent(FrontPage.this, BlackJack.class));
             }
         });
 
