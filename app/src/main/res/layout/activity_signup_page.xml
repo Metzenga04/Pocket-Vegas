@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/amarelo"
     tools:context=".SignUpPage">
 
     <androidx.cardview.widget.CardView
@@ -24,10 +24,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:padding="20dp">
 
 
             <TextView
@@ -52,7 +52,7 @@
                 android:drawablePadding="8dp"
                 android:hint="Name"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/preto"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:textSize="15sp" />
 
@@ -67,7 +67,7 @@
                 android:drawablePadding="8dp"
                 android:hint="E-mail"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/preto"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:textSize="15sp" />
 
@@ -83,7 +83,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/preto"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:textSize="15sp" />
 
@@ -99,7 +99,7 @@
                 android:hint="Re-Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/preto"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:textSize="15sp" />
 
@@ -120,13 +120,12 @@
 
     <ImageView
         android:id="@+id/imageSignUp"
-        android:layout_width="417dp"
-        android:layout_height="195dp"
-        android:background="@color/black"
+        android:layout_width="409dp"
+        android:layout_height="201dp"
+        android:background="@color/amarelo"
         android:src="@drawable/logo_casino"
         app:layout_constraintBottom_toTopOf="@+id/cardSignUp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
@@ -134,16 +133,16 @@
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="69dp"
+        android:layout_height="66dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/transparente"
         android:scaleType="fitCenter"
         android:scaleX="1.5"
         android:scaleY="1.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardSignUp"
-        app:srcCompat="@drawable/backarrowhite" />
+        app:srcCompat="@drawable/backarrowblack" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

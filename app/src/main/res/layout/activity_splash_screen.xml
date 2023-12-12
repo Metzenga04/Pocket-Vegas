@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111111"
+    android:background="@color/amarelo"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".SplashScreen">
@@ -13,5 +13,6 @@
     <ImageView
         android:layout_width="399dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo_casino2" />
+        android:background="@color/amarelo"
+        app:srcCompat="@drawable/logo_casino" />
 </RelativeLayout>

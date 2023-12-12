@@ -4,45 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beje"
+    android:background="@color/amarelo"
     tools:context=".FrontPage">
 
     <Button
         android:id="@+id/btnLogOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="192dp"
-        android:backgroundTint="@color/black"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="291dp"
+        android:backgroundTint="@color/preto"
         android:text="Log Off"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="636dp"
-        android:backgroundTint="@color/black"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="162dp"
+        android:backgroundTint="@color/preto"
         android:text="Play"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bjView" />
 
     <ImageView
         android:id="@+id/bjView"
-        android:layout_width="421dp"
-        android:layout_height="224dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="281dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="95dp"
+        android:background="@color/beje"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/iconeprincipal_da_app" />
+
+    <Button
+        android:id="@+id/btnWgPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="162dp"
+        android:backgroundTint="@color/preto"
+        android:text="Play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wgView" />
+
+    <ImageView
+        android:id="@+id/wgView"
+        android:layout_width="281dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/azul_claro"
+        android:src="@drawable/logo_wargame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlay"
+        app:srcCompat="@drawable/logo_wargame" />
+
+    <Button
+        android:id="@+id/btnPlay2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="162dp"
+        android:backgroundTint="@color/preto"
+        android:text="Play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gView" />
+
+    <ImageView
+        android:id="@+id/gView"
+        android:layout_width="281dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/laranja"
+        android:src="@drawable/logo_dicegame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnWgPlay"
+        app:srcCompat="@drawable/logo_dicegame" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
