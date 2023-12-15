@@ -41,8 +41,8 @@ public class BlackJack extends AppCompatActivity {
         ImageView dCard1 =findViewById(R.id.dealerCard);
         ImageView dCard2 =findViewById(R.id.dealerCard2);
         ImageView dCard3 =findViewById(R.id.dealerCard3);
-        ImageView dcard4 =findViewById(R.id.dealerCard4);
-        ImageView dcard5 =findViewById(R.id.dealerCard5);
+        ImageView dCard4 =findViewById(R.id.dealerCard4);
+        ImageView dCard5 =findViewById(R.id.dealerCard5);
 
         deal.setVisibility(View.VISIBLE);
         stand.setVisibility(View.GONE);
@@ -58,8 +58,8 @@ public class BlackJack extends AppCompatActivity {
         dCard1.setVisibility(View.GONE);
         dCard2.setVisibility(View.GONE);
         dCard3.setVisibility(View.GONE);
-        dcard4.setVisibility(View.GONE);
-        dcard5.setVisibility(View.GONE);
+        dCard4.setVisibility(View.GONE);
+        dCard5.setVisibility(View.GONE);
         split.setVisibility(View.GONE);
 
 
@@ -74,6 +74,7 @@ public class BlackJack extends AppCompatActivity {
             hit.setVisibility(View.VISIBLE);
             hit2.setVisibility(View.GONE);
             hit3.setVisibility(View.GONE);
+            split.setVisibility(View.VISIBLE);
 
             Card first = new Card();
             Card second = new Card();
@@ -104,6 +105,7 @@ public class BlackJack extends AppCompatActivity {
             hit.setVisibility(View.GONE);
             hit2.setVisibility(View.GONE);
             hit3.setVisibility(View.GONE);
+            split.setVisibility(View.GONE);
 
             dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(),"drawable",getPackageName()));
 
@@ -120,14 +122,19 @@ public class BlackJack extends AppCompatActivity {
                 dCard3.setVisibility(View.VISIBLE);
 
                 int sum =0;
+                int dAces =0;
                 for (int i = 0;i < dHand.size();i++){
                     sum+=dHand.get(i).getRank();
                     if (dHand.get(i).getRank()==11){
+                        dAces++;
+                    }
+                    if (sum > 21 && dAces > 0){
+                        sum -= dAces * 10;
                     }
                 }
                 if (sum < 17){
-                    dcard4.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable",getPackageName()));
-                    dcard4.setVisibility(View.VISIBLE);
+                    dCard4.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable",getPackageName()));
+                    dCard4.setVisibility(View.VISIBLE);
                 }
                 else{
                     canHit = false;
@@ -179,6 +186,7 @@ public class BlackJack extends AppCompatActivity {
            hit.setVisibility(View.GONE);
            hit2.setVisibility(View.VISIBLE);
            hit3.setVisibility(View.GONE);
+           split.setVisibility(View.GONE);
 
            int sum = 0;
            int aceCtr =0;
@@ -201,6 +209,7 @@ public class BlackJack extends AppCompatActivity {
                hit.setVisibility(View.GONE);
                hit2.setVisibility(View.GONE);
                hit3.setVisibility(View.GONE);
+               split.setVisibility(View.GONE);
            }
         });
 
@@ -239,6 +248,7 @@ public class BlackJack extends AppCompatActivity {
                 hit.setVisibility(View.GONE);
                 hit2.setVisibility(View.GONE);
                 hit3.setVisibility(View.GONE);
+                split.setVisibility(View.GONE);
             }
         });
 
@@ -297,8 +307,8 @@ public class BlackJack extends AppCompatActivity {
             dCard1.setVisibility(View.GONE);
             dCard2.setVisibility(View.GONE);
             dCard3.setVisibility(View.GONE);
-            dcard4.setVisibility(View.GONE);
-            dcard5.setVisibility(View.GONE);
+            dCard4.setVisibility(View.GONE);
+            dCard5.setVisibility(View.GONE);
         });
     }
 }

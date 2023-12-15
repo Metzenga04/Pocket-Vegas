@@ -2,6 +2,8 @@ package pt.iade.guilhermeabrantes.blackjack;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +22,11 @@ public class WarGame extends AppCompatActivity {
     Button btndeal;
     Random r;
     private Deck deck;
+    private Button btnLeaveTable;
+
     private int leftscore = 0, rightscore = 0;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,7 @@ public class WarGame extends AppCompatActivity {
         tv_score_left = (TextView) findViewById(R.id.tv_score_left);
         tv_score_right = (TextView) findViewById(R.id.tv_score_right);
         btndeal = (Button) findViewById(R.id.btndeal);
+        btnLeaveTable = (Button) findViewById(R.id.btnLeaveTable);
 
         r = new Random();
         deck = new Deck();
@@ -39,6 +45,12 @@ public class WarGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dealCards();
+            }
+        });
+        btnLeaveTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WarGame.this,FrontPage.class));
             }
         });
     }

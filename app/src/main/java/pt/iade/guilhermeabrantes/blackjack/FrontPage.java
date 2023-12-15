@@ -10,7 +10,9 @@ import android.widget.Button;
 public class FrontPage extends AppCompatActivity {
 
     private Button btnLogOff;
-    private Button btnPlay;
+    private Button btnPlayBlack;
+    private Button btnPlayWar;
+    private Button btnPlayDice;
 
 
     @Override
@@ -19,7 +21,9 @@ public class FrontPage extends AppCompatActivity {
         setContentView(R.layout.activity_front_page);
 
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
-        btnPlay = (Button) findViewById(R.id.btnBjPlay);
+        btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
+        btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
+        btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,10 +31,22 @@ public class FrontPage extends AppCompatActivity {
                 startActivity(new Intent(FrontPage.this,WarGame.class));
             }
         });
-        btnPlay.setOnClickListener(new View.OnClickListener() {
+        btnPlayBlack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(FrontPage.this, BlackJack.class));
+            }
+        });
+        btnPlayWar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(FrontPage.this, WarGame.class));
+            }
+        });
+        btnPlayDice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(FrontPage.this, DiceGame.class));
             }
         });
 
