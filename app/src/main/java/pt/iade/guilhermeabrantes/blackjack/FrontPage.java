@@ -28,7 +28,7 @@ public class FrontPage extends AppCompatActivity {
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FrontPage.this,WarGame.class));
+                startActivity(new Intent(FrontPage.this,SignInPage.class));
             }
         });
         btnPlayBlack.setOnClickListener(new View.OnClickListener() {
