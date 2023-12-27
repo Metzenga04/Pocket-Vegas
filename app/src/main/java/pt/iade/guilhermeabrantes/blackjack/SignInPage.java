@@ -43,7 +43,7 @@ public class SignInPage extends AppCompatActivity {
                 if (!validateEmail(emailInputIn.getText().toString())) {
                     emailInputIn.setError("Invalid Email");
                 } else if (!validatePassword(passwordInputIn.getText().toString())) {
-                    passwordInputIn.setError("Invalid Password!\n" + "At least 9 characters");
+                    passwordInputIn.setError("Invalid Password!\n" + "At least 8 characters");
                 } else {
                     startActivity(new Intent(SignInPage.this, FrontPage.class));
                 }
@@ -69,7 +69,7 @@ public class SignInPage extends AppCompatActivity {
     }
 
     protected Boolean validatePassword(String password){
-        if(!(password.isEmpty()) && password.length() > 8) {
+        if(!(password.isEmpty()) && password.length() > 7) {
             return true;
         } else {
             return false;
