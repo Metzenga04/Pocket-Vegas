@@ -35,7 +35,7 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail(String email) {
+    public String getEmail() {
         return this.email;
     }
 
@@ -43,7 +43,7 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword(String password) {
+    public String getPassword() {
         return this.password;
     }
 
