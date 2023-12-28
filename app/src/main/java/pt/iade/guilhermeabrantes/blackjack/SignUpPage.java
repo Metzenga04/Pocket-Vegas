@@ -28,6 +28,7 @@ public class SignUpPage extends AppCompatActivity {
     private ImageButton btnBack;
     private EditText nameInputUp;
     private EditText emailInputUp;
+    private EditText surnameInputUp;
     private EditText passwordInputUp;
     private EditText repassInputUp;
     private String name;
@@ -44,6 +45,7 @@ public class SignUpPage extends AppCompatActivity {
         emailInputUp = (EditText) findViewById(R.id.emailInputUp);
         passwordInputUp = (EditText) findViewById(R.id.passInputUp);
         repassInputUp = (EditText) findViewById(R.id.repassInputUp);
+        surnameInputUp = (EditText) findViewById(R.id.surnameInputUp);
 
         RetrofitService retrofitService = new RetrofitService();
         UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
@@ -67,11 +69,13 @@ public class SignUpPage extends AppCompatActivity {
                     String name = String.valueOf(nameInputUp.getText());
                     String email = String.valueOf(emailInputUp.getText());
                     String password = String.valueOf(passwordInputUp.getText());
+                    String surname = String.valueOf(surnameInputUp.getText());
 
                     User user = new User();
                     user.setName(name);
                     user.setEmail(email);
                     user.setPassword(password);
+                    user.setSurname(surname);
 
                     userApi.save(user)
                             .enqueue(new Callback<User>() {

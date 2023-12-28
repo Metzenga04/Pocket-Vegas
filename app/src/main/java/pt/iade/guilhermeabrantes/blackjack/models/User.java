@@ -9,6 +9,7 @@ public class User {
     private Timestamp register_date;
     private String name;
     private String email;
+    private String surname;
     private String password;
 
     public int getId() {
@@ -35,6 +36,14 @@ public class User {
         this.name = name;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public String getEmail() {
         return this.email;
     }
@@ -53,11 +62,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "employee{" +
+        return "User{" +
                 "id=" + id +
                 ", register_date=" + register_date +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", surname='" + surname + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
