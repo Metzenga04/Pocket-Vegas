@@ -166,7 +166,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnStart"
+        android:id="@+id/btnStartBJ"
         android:layout_width="88dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/preto"
@@ -183,7 +183,7 @@
         android:layout_marginTop="110dp"
         android:backgroundTint="@color/preto"
         android:text="OK"
-        app:layout_constraintBottom_toTopOf="@+id/btnStart"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartBJ"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearDealer" />

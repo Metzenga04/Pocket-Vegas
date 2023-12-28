@@ -43,7 +43,7 @@ public class Card {
     private String nameOfCard;
 
     public Card() {
-        int tempRank = (int) Math.floor(Math.random() * 13) + 1;
+        int tempRank = (int) Math.floor(Math.random() * 26) + 1;
         this.suit = (int) Math.floor(Math.random() * 4) + 1;
 
         switch (tempRank) {

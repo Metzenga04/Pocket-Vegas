@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
 
-import android.view.GestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,9 +20,9 @@ public class BlackJack extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        List<Card> pHand = new ArrayList<Card>();
+        List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
-        Button deal = findViewById(R.id.btnStart);
+        Button deal = findViewById(R.id.btnStartBJ);
         Button stand = findViewById(R.id.btnStand);
         Button hit = findViewById(R.id.btnHit);
         Button ok = findViewById(R.id.btnOk);

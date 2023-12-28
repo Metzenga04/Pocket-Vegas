@@ -15,4 +15,7 @@
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>
     <string name="re_password">Re-Password</string>
+    <string name="leave_table">Leave Table</string>
+    <string name="start">Start</string>
+    <string name="roll">Roll</string>
 </resources>
