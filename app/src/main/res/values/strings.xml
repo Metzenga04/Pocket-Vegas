@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Black Jack</string>
+    <string name="app_name">Pocket Vegas</string>
     <string name="title_activity_test">test</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -18,4 +18,5 @@
     <string name="leave_table">Leave Table</string>
     <string name="start">Start</string>
     <string name="roll">Roll</string>
+    <string name="ok">OK</string>
 </resources>

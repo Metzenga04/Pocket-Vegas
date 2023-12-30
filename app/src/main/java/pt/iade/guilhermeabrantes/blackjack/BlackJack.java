@@ -4,17 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJack extends AppCompatActivity {
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +22,7 @@ public class BlackJack extends AppCompatActivity {
 
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
+
         Button deal = findViewById(R.id.btnStartBJ);
         Button stand = findViewById(R.id.btnStand);
         Button hit = findViewById(R.id.btnHit);
@@ -30,6 +31,9 @@ public class BlackJack extends AppCompatActivity {
         Button hit2 = findViewById(R.id.btnHit2);
         Button hit3 = findViewById(R.id.btnHitAgain);
         Button split = findViewById(R.id.btnSplit);
+
+        TextView playerPoints = findViewById(R.id.playerpoints);
+        TextView dealerPoints = findViewById(R.id.dealerpoints);
 
         ImageView card1 = findViewById(R.id.playerCard);
         ImageView card2 = findViewById(R.id.playerCard2);
@@ -114,9 +118,8 @@ public class BlackJack extends AppCompatActivity {
                 Card toAdd = new Card();
                 dHand.add(toAdd);
 
-                dCard3.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
                 dCard2.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 2).getName(), "drawable", getPackageName()));
-                dCard1.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 3).getName(), "drawable", getPackageName()));
+                dCard3.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
 
                 dCard3.setVisibility(View.VISIBLE);
 
@@ -149,6 +152,8 @@ public class BlackJack extends AppCompatActivity {
             if (pSum > 21 && pAces > 0) {
                 pSum -= pAces * 10;
             }
+            playerPoints.setText("Player: " + pSum);
+            playerPoints.setVisibility(View.VISIBLE);
 
             int dSum = 0;
             int dAces = 0;
@@ -162,10 +167,16 @@ public class BlackJack extends AppCompatActivity {
                 dSum -= pAces * 10;
             }
 
+            dealerPoints.setText("Dealer: " + dSum);
+            dealerPoints.setVisibility(View.VISIBLE);
+
+
             if (dSum > 21) {
                 Toast.makeText(this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
             } else if (pSum > dSum) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
+            } else if (pSum == dSum) {
+                Toast.makeText(this,"Dead end!",Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
@@ -200,7 +211,7 @@ public class BlackJack extends AppCompatActivity {
 
             if (sum > 21) {
 
-                Toast.makeText(this, "Bad luck.Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
 
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
@@ -239,7 +250,7 @@ public class BlackJack extends AppCompatActivity {
 
             if (sum > 21) {
 
-                Toast.makeText(this, "Bad luck.Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
 
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
@@ -307,6 +318,8 @@ public class BlackJack extends AppCompatActivity {
             dCard3.setVisibility(View.GONE);
             dCard4.setVisibility(View.GONE);
             dCard5.setVisibility(View.GONE);
+            dealerPoints.setVisibility(View.GONE);
+            playerPoints.setVisibility(View.GONE);
         });
     }
 }
