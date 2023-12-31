@@ -1,5 +1,6 @@
 package pt.iade.guilhermeabrantes.blackjack;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -130,9 +131,7 @@ public class DiceGame extends AppCompatActivity {
                     pSum= 30;
                     typeOfPointsP.setText("Small Straight!");
                 }else {
-                    for (int i = 0; i < pHand.size(); i++) {
-                        pSum += pHand.get(i).getRank();
-                    }
+                    pSum= chance(pHand);
                     typeOfPointsP.setText("Chance");
                 }
             } else if (calculateFullHouseScore(pHand)) {
@@ -140,25 +139,17 @@ public class DiceGame extends AppCompatActivity {
                     pSum= 25;
                     typeOfPointsP.setText("Full House!");
                 }else {
-                    for (int i = 0; i < pHand.size(); i++) {
-                        pSum += pHand.get(i).getRank();
-                    }
+                    pSum= chance(pHand);
                     typeOfPointsP.setText("Chance");
                 }
             } else if (isFourOfAKind(pHand)) {
                 typeOfPointsP.setText("Four of a kind!");
-                for (int i = 0; i < pHand.size(); i++) {
-                    pSum += pHand.get(i).getRank();
-                }
+                pSum= chance(pHand);
             } else if(isThreeOfAKind(pHand)) {
                 typeOfPointsP.setText("Three of a kind!");
-                for (int i = 0; i < pHand.size(); i++) {
-                    pSum += pHand.get(i).getRank();
-                }
+                pSum= chance(pHand);
             }else {
-                    for (int i = 0; i < pHand.size(); i++) {
-                        pSum += pHand.get(i).getRank();
-                    }
+                    pSum= chance(pHand);
                     typeOfPointsP.setText("Chance");
                 }
             int dSum = 0;
@@ -173,9 +164,7 @@ public class DiceGame extends AppCompatActivity {
                     dSum= 30;
                     typeOfPointsD.setText("Small Straight!");
                 }else {
-                    for (int i = 0; i < dHand.size(); i++) {
-                        dSum += dHand.get(i).getRank();
-                    }
+                    dSum= chance(dHand);
                     typeOfPointsD.setText("Chance");
                 }
             } else if (calculateFullHouseScore(dHand)) {
@@ -183,25 +172,17 @@ public class DiceGame extends AppCompatActivity {
                     dSum= 25;
                     typeOfPointsD.setText("Full House!");
                 }else {
-                    for (int i = 0; i < dHand.size(); i++) {
-                        dSum += dHand.get(i).getRank();
-                    }
+                    dSum= chance(dHand);
                     typeOfPointsD.setText("Chance");
                 }
-                } else if (isFourOfAKind(dHand)) {
+            } else if (isFourOfAKind(dHand)) {
                 typeOfPointsD.setText("Four of a kind!");
-                for (int i = 0; i < dHand.size(); i++) {
-                    dSum += dHand.get(i).getRank();
-                }
+                dSum= chance(dHand);
             } else if(isThreeOfAKind(dHand)) {
                 typeOfPointsD.setText("Three of a kind!");
-                for (int i = 0; i < dHand.size(); i++) {
-                    dSum += dHand.get(i).getRank();
-                }
+                dSum= chance(dHand);
             }else {
-                for (int i = 0; i < dHand.size(); i++) {
-                    dSum += dHand.get(i).getRank();
-                }
+                dSum= chance(dHand);
                 typeOfPointsD.setText("Chance");
             }
             playerPoints.setText("Player: " + pSum);
@@ -433,6 +414,13 @@ public class DiceGame extends AppCompatActivity {
         }
 
         return true;
+    }
+    public int chance(List<Dices> hand) {
+        int sum = 0;
+        for (int i = 0; i < hand.size(); i++) {
+            sum += hand.get(i).getRank();
+        }
+        return sum;
     }
 
 }
