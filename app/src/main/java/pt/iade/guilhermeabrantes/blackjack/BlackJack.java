@@ -78,6 +78,7 @@ public class BlackJack extends AppCompatActivity {
             hit2.setVisibility(View.GONE);
             hit3.setVisibility(View.GONE);
             split.setVisibility(View.VISIBLE);
+            leave.setVisibility(View.GONE);
 
             Card first = new Card();
             Card second = new Card();
@@ -172,13 +173,13 @@ public class BlackJack extends AppCompatActivity {
 
 
             if (dSum > 21) {
-                Toast.makeText(this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
             } else if (pSum > dSum) {
-                Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
             } else if (pSum == dSum) {
-                Toast.makeText(this,"Dead end!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this,"Dead end!",Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
             ok.setVisibility(View.VISIBLE);
         });
@@ -211,7 +212,7 @@ public class BlackJack extends AppCompatActivity {
 
             if (sum > 21) {
 
-                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
 
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
@@ -250,7 +251,7 @@ public class BlackJack extends AppCompatActivity {
 
             if (sum > 21) {
 
-                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
 
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
@@ -307,6 +308,7 @@ public class BlackJack extends AppCompatActivity {
             dHand.clear();
 
             deal.setVisibility(View.VISIBLE);
+            leave.setVisibility(View.VISIBLE);
             ok.setVisibility(View.GONE);
             card1.setVisibility(View.GONE);
             card2.setVisibility(View.GONE);

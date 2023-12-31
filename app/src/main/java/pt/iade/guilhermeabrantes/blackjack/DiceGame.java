@@ -1,20 +1,20 @@
 package pt.iade.guilhermeabrantes.blackjack;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import pt.iade.guilhermeabrantes.blackjack.models.Card;
 import pt.iade.guilhermeabrantes.blackjack.models.Dices;
 
 public class DiceGame extends AppCompatActivity {
@@ -28,14 +28,12 @@ public class DiceGame extends AppCompatActivity {
     private Button btnRollDiceAgain2;
     List<Dices> pHand = new ArrayList<>();
     List<Dices> dHand = new ArrayList<>();
-
-    @SuppressLint({"MissingInflatedId", "DiscouragedApi", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_game);
 
-        btnStartDG= (Button) findViewById(R.id.btnStardDG);
+        btnStartDG = (Button) findViewById(R.id.btnStardDG);
         btnRollDice = (Button) findViewById(R.id.btnRollDice);
         btnLeave = (Button) findViewById(R.id.btnLeave);
         btnStay = (Button) findViewById(R.id.btnStay);
@@ -51,6 +49,8 @@ public class DiceGame extends AppCompatActivity {
 
         TextView playerPoints = findViewById(R.id.player_points);
         TextView dealerPoints = findViewById(R.id.dealer_points);
+        TextView typeOfPointsD = findViewById(R.id.typeOfPointsD);
+        TextView typeOfPointsP = findViewById(R.id.typeOfPointsP);
 
         ImageView dDice1 = findViewById(R.id.dealerDice);
         ImageView dDice2 = findViewById(R.id.dealerDice2);
@@ -64,6 +64,10 @@ public class DiceGame extends AppCompatActivity {
         btnRollDiceAgain.setVisibility(View.GONE);
         btnRollDiceAgain2.setVisibility(View.GONE);
         ok.setVisibility(View.GONE);
+        typeOfPointsP.setVisibility(View.GONE);
+        typeOfPointsD.setVisibility(View.GONE);
+        dealerPoints.setVisibility(View.GONE);
+        playerPoints.setVisibility(View.GONE);
         dice1.setVisibility(View.GONE);
         dice2.setVisibility(View.GONE);
         dice3.setVisibility(View.GONE);
@@ -86,6 +90,9 @@ public class DiceGame extends AppCompatActivity {
         btnStay.setOnClickListener(v -> {
             btnStay.setVisibility(View.GONE);
             btnRollDiceAgain.setVisibility(View.GONE);
+            btnRollDiceAgain2.setVisibility(View.GONE);
+            typeOfPointsP.setVisibility(View.VISIBLE);
+            typeOfPointsD.setVisibility(View.VISIBLE);
 
             Dices first = new Dices();
             Dices second = new Dices();
@@ -112,12 +119,90 @@ public class DiceGame extends AppCompatActivity {
             dDice5.setVisibility(View.VISIBLE);
 
             int pSum = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                pSum += pHand.get(i).getRank();
-            }
+            if (calculateYatzeeScore(pHand)) {
+                pSum = 50;
+                typeOfPointsP.setText("Yatzee!!!!");
+            } else if (isLargeStraight(pHand)) {
+                    pSum=40;
+                    typeOfPointsP.setText("Large Straight!!");
+            } else if (isSmallStraight(pHand)) {
+                if (pSum<=30){
+                    pSum= 30;
+                    typeOfPointsP.setText("Small Straight!");
+                }else {
+                    for (int i = 0; i < pHand.size(); i++) {
+                        pSum += pHand.get(i).getRank();
+                    }
+                    typeOfPointsP.setText("Chance");
+                }
+            } else if (calculateFullHouseScore(pHand)) {
+                if (pSum<=25){
+                    pSum= 25;
+                    typeOfPointsP.setText("Full House!");
+                }else {
+                    for (int i = 0; i < pHand.size(); i++) {
+                        pSum += pHand.get(i).getRank();
+                    }
+                    typeOfPointsP.setText("Chance");
+                }
+            } else if (isFourOfAKind(pHand)) {
+                typeOfPointsP.setText("Four of a kind!");
+                for (int i = 0; i < pHand.size(); i++) {
+                    pSum += pHand.get(i).getRank();
+                }
+            } else if(isThreeOfAKind(pHand)) {
+                typeOfPointsP.setText("Three of a kind!");
+                for (int i = 0; i < pHand.size(); i++) {
+                    pSum += pHand.get(i).getRank();
+                }
+            }else {
+                    for (int i = 0; i < pHand.size(); i++) {
+                        pSum += pHand.get(i).getRank();
+                    }
+                    typeOfPointsP.setText("Chance");
+                }
             int dSum = 0;
-            for (int i = 0; i < dHand.size(); i++) {
-                dSum += dHand.get(i).getRank();
+            if (calculateYatzeeScore(dHand)) {
+                dSum = 50;
+                typeOfPointsD.setText("Yatzee!!!!");
+            } else if (isLargeStraight(dHand)) {
+                dSum=40;
+                typeOfPointsD.setText("Large Straight!!");
+            } else if (isSmallStraight(dHand)) {
+                if (dSum<=30){
+                    dSum= 30;
+                    typeOfPointsD.setText("Small Straight!");
+                }else {
+                    for (int i = 0; i < dHand.size(); i++) {
+                        dSum += dHand.get(i).getRank();
+                    }
+                    typeOfPointsD.setText("Chance");
+                }
+            } else if (calculateFullHouseScore(dHand)) {
+                if (dSum<=25){
+                    dSum= 25;
+                    typeOfPointsD.setText("Full House!");
+                }else {
+                    for (int i = 0; i < dHand.size(); i++) {
+                        dSum += dHand.get(i).getRank();
+                    }
+                    typeOfPointsD.setText("Chance");
+                }
+                } else if (isFourOfAKind(dHand)) {
+                typeOfPointsD.setText("Four of a kind!");
+                for (int i = 0; i < dHand.size(); i++) {
+                    dSum += dHand.get(i).getRank();
+                }
+            } else if(isThreeOfAKind(dHand)) {
+                typeOfPointsD.setText("Three of a kind!");
+                for (int i = 0; i < dHand.size(); i++) {
+                    dSum += dHand.get(i).getRank();
+                }
+            }else {
+                for (int i = 0; i < dHand.size(); i++) {
+                    dSum += dHand.get(i).getRank();
+                }
+                typeOfPointsD.setText("Chance");
             }
             playerPoints.setText("Player: " + pSum);
             playerPoints.setVisibility(View.VISIBLE);
@@ -127,41 +212,43 @@ public class DiceGame extends AppCompatActivity {
 
             if (pSum > dSum) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "You Lose!", Toast.LENGTH_SHORT).show();
+            } else if (pSum==dSum){
+                Toast.makeText(this, "Dead End!", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "You Lose", Toast.LENGTH_SHORT).show();
             }
             ok.setVisibility(View.VISIBLE);
         });
 
         btnRollDice.setOnClickListener(v -> {
-                btnStartDG.setVisibility(View.GONE);
-                btnStay.setVisibility(View.VISIBLE);
-                btnRollDice.setVisibility(View.GONE);
-                btnRollDiceAgain.setVisibility(View.VISIBLE);
+            btnStartDG.setVisibility(View.GONE);
+            btnStay.setVisibility(View.VISIBLE);
+            btnRollDice.setVisibility(View.GONE);
+            btnRollDiceAgain.setVisibility(View.VISIBLE);
 
-                Dices first = new Dices();
-                Dices second = new Dices();
-                Dices third = new Dices();
-                Dices fourth = new Dices();
-                Dices fifth = new Dices();
+            Dices first = new Dices();
+            Dices second = new Dices();
+            Dices third = new Dices();
+            Dices fourth = new Dices();
+            Dices fifth = new Dices();
 
-                pHand.add(first);
-                pHand.add(second);
-                pHand.add(third);
-                pHand.add(fourth);
-                pHand.add(fifth);
+            pHand.add(first);
+            pHand.add(second);
+            pHand.add(third);
+            pHand.add(fourth);
+            pHand.add(fifth);
 
-                dice1.setImageResource(getResources().getIdentifier(first.getName(), "drawable", getPackageName()));
-                dice2.setImageResource(getResources().getIdentifier(second.getName(), "drawable", getPackageName()));
-                dice3.setImageResource(getResources().getIdentifier(third.getName(), "drawable", getPackageName()));
-                dice4.setImageResource(getResources().getIdentifier(fourth.getName(), "drawable", getPackageName()));
-                dice5.setImageResource(getResources().getIdentifier(fifth.getName(), "drawable", getPackageName()));
+            dice1.setImageResource(getResources().getIdentifier(first.getName(), "drawable", getPackageName()));
+            dice2.setImageResource(getResources().getIdentifier(second.getName(), "drawable", getPackageName()));
+            dice3.setImageResource(getResources().getIdentifier(third.getName(), "drawable", getPackageName()));
+            dice4.setImageResource(getResources().getIdentifier(fourth.getName(), "drawable", getPackageName()));
+            dice5.setImageResource(getResources().getIdentifier(fifth.getName(), "drawable", getPackageName()));
 
-                dice1.setVisibility(View.VISIBLE);
-                dice2.setVisibility(View.VISIBLE);
-                dice3.setVisibility(View.VISIBLE);
-                dice4.setVisibility(View.VISIBLE);
-                dice5.setVisibility(View.VISIBLE);
+            dice1.setVisibility(View.VISIBLE);
+            dice2.setVisibility(View.VISIBLE);
+            dice3.setVisibility(View.VISIBLE);
+            dice4.setVisibility(View.VISIBLE);
+            dice5.setVisibility(View.VISIBLE);
         });
 
         btnRollDiceAgain.setOnClickListener(v -> {
@@ -225,29 +312,127 @@ public class DiceGame extends AppCompatActivity {
             dice5.setVisibility(View.VISIBLE);
         });
 
-         ok.setOnClickListener(v -> {
+        ok.setOnClickListener(v -> {
 
-        Toast.makeText(this, "Dice Game", Toast.LENGTH_SHORT).show();
-        pHand.clear();
-        dHand.clear();
+            Toast.makeText(this, "Dice Game", Toast.LENGTH_SHORT).show();
+            pHand.clear();
+            dHand.clear();
 
-        btnStartDG.setVisibility(View.VISIBLE);
-        btnLeave.setVisibility(View.VISIBLE);
-        ok.setVisibility(View.GONE);
-        dice1.setVisibility(View.GONE);
-        dice2.setVisibility(View.GONE);
-        dice3.setVisibility(View.GONE);
-        dice4.setVisibility(View.GONE);
-        dice5.setVisibility(View.GONE);
-        dDice1.setVisibility(View.GONE);
-        dDice2.setVisibility(View.GONE);
-        dDice3.setVisibility(View.GONE);
-        dDice4.setVisibility(View.GONE);
-        dDice5.setVisibility(View.GONE);
-        dealerPoints.setVisibility(View.GONE);
-        playerPoints.setVisibility(View.GONE);
+            btnStartDG.setVisibility(View.VISIBLE);
+            btnLeave.setVisibility(View.VISIBLE);
+            ok.setVisibility(View.GONE);
+            dice1.setVisibility(View.GONE);
+            dice2.setVisibility(View.GONE);
+            dice3.setVisibility(View.GONE);
+            dice4.setVisibility(View.GONE);
+            dice5.setVisibility(View.GONE);
+            dDice1.setVisibility(View.GONE);
+            dDice2.setVisibility(View.GONE);
+            dDice3.setVisibility(View.GONE);
+            dDice4.setVisibility(View.GONE);
+            dDice5.setVisibility(View.GONE);
+            dealerPoints.setVisibility(View.GONE);
+            playerPoints.setVisibility(View.GONE);
+            typeOfPointsD.setVisibility(View.GONE);
+            typeOfPointsP.setVisibility(View.GONE);
         });
 
+    }
+
+    public boolean calculateYatzeeScore(List<Dices> hand) {
+        Map<Integer, Integer> rankCount = new HashMap<>();
+
+        for (Dices dice : hand) {
+            int rank = dice.getRank();
+            rankCount.put(rank, rankCount.getOrDefault(rank, 0) + 1);
+        }
+
+        for (int count : rankCount.values()) {
+            if (count >= 5) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean calculateFullHouseScore(List<Dices> hand) {
+
+        Map<Integer, Integer> rankCount = new HashMap<>();
+        for (Dices dices : hand) {
+            int rank = dices.getRank();
+            rankCount.put(rank, rankCount.getOrDefault(rank, 0) + 1);
+        }
+
+        boolean hasThreeOfAKind = false;
+        boolean hasTwoOfAKind = false;
+
+        for (int count : rankCount.values()) {
+            if (count == 3) {
+                hasThreeOfAKind = true;
+            } else if (count == 2) {
+                hasTwoOfAKind = true;
+            }
+        }
+        return hasThreeOfAKind && hasTwoOfAKind;
+    }
+    public boolean isThreeOfAKind(List<Dices> hand) {
+        Map<Integer, Integer> rankCount = new HashMap<>();
+        for (Dices dices : hand) {
+            int rank = dices.getRank();
+            rankCount.put(rank, rankCount.getOrDefault(rank, 0) + 1);
+        }
+
+        for (int count : rankCount.values()) {
+            if (count == 3) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public boolean isFourOfAKind(List<Dices> hand) {
+        Map<Integer, Integer> rankCount = new HashMap<>();
+        for (Dices dices : hand) {
+            int rank = dices.getRank();
+            rankCount.put(rank, rankCount.getOrDefault(rank, 0) + 1);
+        }
+
+        for (int count : rankCount.values()) {
+            if (count == 4) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public boolean isSmallStraight(List<Dices> hand) {
+        hand.sort(Comparator.comparingInt(Dices::getRank));
+
+        int consecutiveCount = 0;
+        for (int i = 0; i < hand.size() - 1; i++) {
+            if (hand.get(i + 1).getRank() == hand.get(i).getRank() + 1) {
+                consecutiveCount++;
+                if (consecutiveCount >= 3) {
+                    return true;
+                }
+            } else if (hand.get(i + 1).getRank() != hand.get(i).getRank()) {
+                consecutiveCount = 0;
+            }
+        }
+
+        return false;
+    }
+    public boolean isLargeStraight(List<Dices> hand) {
+        Collections.sort(hand, Comparator.comparingInt(Dices::getRank));
+
+        for (int i = 0; i < hand.size() - 1; i++) {
+            if (hand.get(i + 1).getRank() != hand.get(i).getRank() + 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
