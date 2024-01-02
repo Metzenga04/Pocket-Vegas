@@ -2,10 +2,13 @@ package pt.iade.guilhermeabrantes.blackjack;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pt.iade.guilhermeabrantes.blackjack.BlackJack;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class FrontPage extends AppCompatActivity {
 
@@ -13,7 +16,12 @@ public class FrontPage extends AppCompatActivity {
     private Button btnPlayBlack;
     private Button btnPlayWar;
     private Button btnPlayDice;
+    private TextView playerCredits;
+    public int totalCredits;
 
+    public void setTotalCredits(int credits) {
+        totalCredits = credits;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,9 @@ public class FrontPage extends AppCompatActivity {
         btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
         btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
         btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
+        playerCredits = (TextView) findViewById(R.id.playerCredits);
+
+        playerCredits.setText("Créditos: " + String.valueOf(totalCredits));
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override

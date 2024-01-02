@@ -1,29 +1,46 @@
 package pt.iade.guilhermeabrantes.blackjack;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJack extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
-    @Override
+
+    private SeekBar creditsBar;
+    private TextView creditsResult;
+    private TextView pTotalCredits;
+    private int playerBet;
+    public int maxBet;
+
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
+        creditsBar = (SeekBar) findViewById(R.id.seekBarCredits);
+        creditsResult = (TextView) findViewById(R.id.playerCredits);
+        pTotalCredits = (TextView) findViewById(R.id.totalCredits);
+        maxBet = creditsBar.getMax();
+
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
 
-        Button deal = findViewById(R.id.btnStartBJ);
+        Button start = findViewById(R.id.btnStartBJ);
         Button stand = findViewById(R.id.btnStand);
         Button hit = findViewById(R.id.btnHit);
         Button ok = findViewById(R.id.btnOk);
@@ -32,8 +49,8 @@ public class BlackJack extends AppCompatActivity {
         Button hit3 = findViewById(R.id.btnHitAgain);
         Button split = findViewById(R.id.btnSplit);
 
-        TextView playerPoints = findViewById(R.id.playerpoints);
-        TextView dealerPoints = findViewById(R.id.dealerpoints);
+        TextView playerPoints = findViewById(R.id.playerPoints);
+        TextView dealerPoints = findViewById(R.id.dealerPoints);
 
         ImageView card1 = findViewById(R.id.playerCard);
         ImageView card2 = findViewById(R.id.playerCard2);
@@ -47,7 +64,7 @@ public class BlackJack extends AppCompatActivity {
         ImageView dCard4 = findViewById(R.id.dealerCard4);
         ImageView dCard5 = findViewById(R.id.dealerCard5);
 
-        deal.setVisibility(View.VISIBLE);
+        start.setVisibility(View.VISIBLE);
         stand.setVisibility(View.GONE);
         hit.setVisibility(View.GONE);
         hit2.setVisibility(View.GONE);
@@ -65,20 +82,43 @@ public class BlackJack extends AppCompatActivity {
         dCard5.setVisibility(View.GONE);
         split.setVisibility(View.GONE);
 
+        creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
+                creditsResult.setText("Apostar: " + credits);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                creditsResult.setText("Apostar: " + seekBar.getProgress());
+                playerBet = seekBar.getProgress();
+                seekBar.setMax(maxBet);
+            }
+        });
 
         leave.setOnClickListener(v -> {
             startActivity(new Intent(BlackJack.this, FrontPage.class));
         });
 
 
-        deal.setOnClickListener(v -> {
-            deal.setVisibility(View.GONE);
+        start.setOnClickListener(v -> {
+            start.setVisibility(View.GONE);
             stand.setVisibility(View.VISIBLE);
             hit.setVisibility(View.VISIBLE);
             hit2.setVisibility(View.GONE);
             hit3.setVisibility(View.GONE);
             split.setVisibility(View.VISIBLE);
             leave.setVisibility(View.GONE);
+            creditsResult.setVisibility(View.GONE);
+            creditsBar.setVisibility(View.GONE);
+
+            maxBet -= playerBet;
+            pTotalCredits.setText("Créditos: " + String.valueOf(maxBet));
 
             Card first = new Card();
             Card second = new Card();
@@ -104,6 +144,7 @@ public class BlackJack extends AppCompatActivity {
             dCard1.setVisibility(View.VISIBLE);
             dCard2.setVisibility(View.VISIBLE);
         });
+
         stand.setOnClickListener(v -> {
             stand.setVisibility(View.GONE);
             hit.setVisibility(View.GONE);
@@ -174,10 +215,16 @@ public class BlackJack extends AppCompatActivity {
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
+                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                maxBet += 2 * playerBet;
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
+                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                maxBet += 2 * playerBet;
             } else if (pSum == dSum) {
-                Toast.makeText(BlackJack.this,"Dead end!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
+                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                maxBet += playerBet;
             } else {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
@@ -291,7 +338,7 @@ public class BlackJack extends AppCompatActivity {
 
             if (sum > 21) {
 
-                Toast.makeText(this, "Bad luck.Dealer Wins!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
 
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
@@ -307,7 +354,9 @@ public class BlackJack extends AppCompatActivity {
             pHand.clear();
             dHand.clear();
 
-            deal.setVisibility(View.VISIBLE);
+            creditsResult.setVisibility(View.VISIBLE);
+            creditsBar.setVisibility(View.VISIBLE);
+            start.setVisibility(View.VISIBLE);
             leave.setVisibility(View.VISIBLE);
             ok.setVisibility(View.GONE);
             card1.setVisibility(View.GONE);
