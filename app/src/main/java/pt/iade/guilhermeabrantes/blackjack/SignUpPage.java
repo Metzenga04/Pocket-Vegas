@@ -32,6 +32,7 @@ public class SignUpPage extends AppCompatActivity {
     private EditText passwordInputUp;
     private EditText repassInputUp;
     private String name;
+    private String surname;
 
 
     @Override
@@ -56,6 +57,8 @@ public class SignUpPage extends AppCompatActivity {
             public void onClick(View view) {
                 if (!validateName()) {
                     nameInputUp.setError("Invalid Name!");
+                } else if (!validateSurName()) {
+                    surnameInputUp.setError("Invalid Surname");
                 } else if (!validateEmail(emailInputUp.getText().toString())) {
                     emailInputUp.setError("Invalid Email!");
                     emailInputUp.requestFocus();
@@ -142,6 +145,16 @@ public class SignUpPage extends AppCompatActivity {
         name = nameInputUp.getText().toString();
 
         if(!(name.isEmpty()) && name.length() > 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    protected Boolean validateSurName() {
+
+        surname = surnameInputUp.getText().toString();
+
+        if (!(surname.isEmpty()) && surname.length() > 2) {
             return true;
         } else {
             return false;

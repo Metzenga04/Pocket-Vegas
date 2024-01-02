@@ -4,12 +4,12 @@ package pt.iade.guilhermeabrantes.blackjack.models;
 import java.sql.Timestamp;
 
 public class User {
-
     private int id;
+    private int credits;
     private Timestamp register_date;
     private String name;
-    private String email;
     private String surname;
+    private String email;
     private String password;
 
     public int getId() {
@@ -18,6 +18,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public Timestamp getRegister_date() {
@@ -36,16 +44,8 @@ public class User {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
@@ -53,11 +53,18 @@ public class User {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int creditos) {
+        this.credits = creditos;
     }
 
     @Override
@@ -66,8 +73,8 @@ public class User {
                 "id=" + id +
                 ", register_date=" + register_date +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
