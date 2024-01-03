@@ -21,35 +21,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FrontPage extends AppCompatActivity {
-
     private Button btnLogOff;
     private Button btnPlayBlack;
     private Button btnPlayWar;
     private Button btnPlayDice;
-    private TextView playerCredits;
-    public int totalCredits;
+    private TextView playerCreditsTextView;
+    private int totalCredits;
+    RetrofitService retrofitService = new RetrofitService();
+    SessionApi sessionApi = retrofitService.getRetrofit().create(SessionApi.class);
+    UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
 
-        RetrofitService retrofitService = new RetrofitService();
-        SessionApi sessionApi = retrofitService.getRetrofit().create(SessionApi.class);
-        UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
-
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
         btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
         btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
         btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
-        playerCredits = (TextView) findViewById(R.id.playerCredits);
+        playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
 
-        playerCredits.setText("Créditos: " + String.valueOf(totalCredits));
+        playerCreditsTextView.setText("Créditos: " + String.valueOf(totalCredits));
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FrontPage.this,SignInPage.class));
+                startActivity(new Intent(FrontPage.this, SignInPage.class));
             }
         });
         btnPlayBlack.setOnClickListener(new View.OnClickListener() {
@@ -57,18 +55,18 @@ public class FrontPage extends AppCompatActivity {
             public void onClick(View v) {
                 Session session = new Session();
                 sessionApi.save(session)
-                                .enqueue(new Callback<Session>() {
-                                    @Override
-                                    public void onResponse(Call<Session> call, Response<Session> response) {
-                                        Toast.makeText(FrontPage.this,"Welcome to Black Jack.", Toast.LENGTH_SHORT).show();
-                                    }
+                        .enqueue(new Callback<Session>() {
+                            @Override
+                            public void onResponse(Call<Session> call, Response<Session> response) {
+                                Toast.makeText(FrontPage.this, "Welcome to Black Jack.", Toast.LENGTH_SHORT).show();
+                            }
 
-                                    @Override
-                                    public void onFailure(Call<Session> call, Throwable t) {
-                                        Toast.makeText(FrontPage.this,"Oops,something went wrong!", Toast.LENGTH_SHORT).show();
-                                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE,"Error Occurred",t);
-                                    }
-                                });
+                            @Override
+                            public void onFailure(Call<Session> call, Throwable t) {
+                                Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                            }
+                        });
                 startActivity(new Intent(FrontPage.this, BlackJack.class));
             }
         });

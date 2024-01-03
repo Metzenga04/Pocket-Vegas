@@ -52,60 +52,52 @@ public class SignUpPage extends AppCompatActivity {
         UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
 
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!validateName()) {
-                    nameInputUp.setError("Invalid Name!");
-                } else if (!validateSurName()) {
-                    surnameInputUp.setError("Invalid Surname");
-                } else if (!validateEmail(emailInputUp.getText().toString())) {
-                    emailInputUp.setError("Invalid Email!");
-                    emailInputUp.requestFocus();
-                } else if (!validatePassword(passwordInputUp.getText().toString())) {
-                    passwordInputUp.setError("Invalid Password!\n" +
-                            "At least 8 characters");
-                    passwordInputUp.requestFocus();
-                } else if (!validateRepassword(repassInputUp.getText().toString(), passwordInputUp.getText().toString())) {
-                    repassInputUp.setError("The password does not match!\n");
-                } else {
-                    String name = String.valueOf(nameInputUp.getText());
-                    String email = String.valueOf(emailInputUp.getText());
-                    String password = String.valueOf(passwordInputUp.getText());
-                    String surname = String.valueOf(surnameInputUp.getText());
+        btnSignUp.setOnClickListener(view -> {
+            if (!validateName()) {
+                nameInputUp.setError("Invalid Name!");
+            } else if (!validateSurName()) {
+                surnameInputUp.setError("Invalid Surname");
+            } else if (!validateEmail(emailInputUp.getText().toString())) {
+                emailInputUp.setError("Invalid Email!");
+                emailInputUp.requestFocus();
+            } else if (!validatePassword(passwordInputUp.getText().toString())) {
+                passwordInputUp.setError("Invalid Password!\n" +
+                        "At least 8 characters");
+                passwordInputUp.requestFocus();
+            } else if (!validateRepassword(repassInputUp.getText().toString(), passwordInputUp.getText().toString())) {
+                repassInputUp.setError("The password does not match!\n");
+            } else {
+                String name = String.valueOf(nameInputUp.getText());
+                String email = String.valueOf(emailInputUp.getText());
+                String password = String.valueOf(passwordInputUp.getText());
+                String surname = String.valueOf(surnameInputUp.getText());
 
-                    User user = new User();
-                    user.setName(name);
-                    user.setEmail(email);
-                    user.setPassword(password);
-                    user.setSurname(surname);
+                User user = new User();
+                user.setName(name);
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setSurname(surname);
 
-                    userApi.save(user)
-                            .enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                    Toast.makeText(SignUpPage.this,"Save Successful!", Toast.LENGTH_SHORT).show();
-                                }
+                userApi.save(user)
+                        .enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                Toast.makeText(SignUpPage.this,"Save Successful!", Toast.LENGTH_SHORT).show();
+                            }
 
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-                                    Toast.makeText(SignUpPage.this,"Save Failed!!!", Toast.LENGTH_SHORT).show();
-                                    Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE,"Error Occurred",t);
-                                }
-                            });
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                Toast.makeText(SignUpPage.this,"Save Failed!!!", Toast.LENGTH_SHORT).show();
+                                Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE,"Error Occurred",t);
+                            }
+                        });
 
-                    startActivity(new Intent(SignUpPage.this, SignInPage.class));
-                }
-
-
-            }
-        });
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 startActivity(new Intent(SignUpPage.this, SignInPage.class));
             }
+
+
         });
+        btnBack.setOnClickListener(view -> startActivity(new Intent(SignUpPage.this, SignInPage.class)));
     }
 
 

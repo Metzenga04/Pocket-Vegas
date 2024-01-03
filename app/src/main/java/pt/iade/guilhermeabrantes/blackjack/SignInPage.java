@@ -99,7 +99,6 @@ public class SignInPage extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<List<User>> call, Throwable t) {
-                            // Erro na chamada da API
                             Toast.makeText(SignInPage.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
                             Logger.getLogger(SignInPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                         }
@@ -107,8 +106,6 @@ public class SignInPage extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     protected boolean validateEmail(String email) {

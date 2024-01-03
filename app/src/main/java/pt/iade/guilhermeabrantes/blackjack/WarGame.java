@@ -2,7 +2,6 @@ package pt.iade.guilhermeabrantes.blackjack;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +28,7 @@ public class WarGame extends AppCompatActivity {
 
         creditsBarWG = (SeekBar) findViewById(R.id.seekBarCreditsWG);
         betResultWG = (TextView) findViewById(R.id.playerBet);
-        pCredits = (TextView) findViewById(R.id.playerCredits);
+        pCredits = (TextView) findViewById(R.id.playerCreditsTextView);
         cCredits = (TextView) findViewById(R.id.cpuCredits);
         totalCreditsWG = (TextView) findViewById(R.id.totalCredits);
         tv_score_left = (TextView) findViewById(R.id.tv_score_left);

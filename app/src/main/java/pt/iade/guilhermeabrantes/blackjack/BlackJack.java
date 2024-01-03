@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
+import pt.iade.guilhermeabrantes.blackjack.models.User;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
 
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +27,9 @@ public class BlackJack extends AppCompatActivity {
     private SeekBar creditsBarBJ;
     private TextView creditsResultBJ, totalCreditsBJ;
     private int playerBetBJ, maxBetBJ;
+    RetrofitService retrofitService = new RetrofitService();
+    UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
+
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class BlackJack extends AppCompatActivity {
         setContentView(R.layout.activity_black_jack);
 
         creditsBarBJ = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
-        creditsResultBJ = (TextView) findViewById(R.id.playerCreditsBJ);
+        creditsResultBJ = (TextView) findViewById(R.id.playerBetBJ);
         totalCreditsBJ = (TextView) findViewById(R.id.totalCredits);
         maxBetBJ = creditsBarBJ.getMax();
 
@@ -88,7 +94,6 @@ public class BlackJack extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -106,6 +111,9 @@ public class BlackJack extends AppCompatActivity {
 
         start.setOnClickListener(v -> {
             if (playerBetBJ == 0) {
+                Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (playerBetBJ > maxBetBJ) {
                 Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -208,12 +216,11 @@ public class BlackJack extends AppCompatActivity {
                 }
             }
             if (dSum > 21 && dAces > 0) {
-                dSum -= pAces * 10;
+                dSum -= dAces * 10;
             }
 
             dealerPoints.setText("Dealer: " + dSum);
             dealerPoints.setVisibility(View.VISIBLE);
-
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();

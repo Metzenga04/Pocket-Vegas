@@ -8,15 +8,19 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public interface UserApi {
     @GET("/user/get-all")
     Call<List<User>> getAllUsers();
+
+    @GET("/user/get-by-id/{userId}")
+    Call<User> getUserById(@Path("userId") int userId);
 
     @POST("/user/save")
     Call<User> save(@Body User user);
 
     @DELETE("/user/delete")
     Call<User> delete(@Body User user);
-
-    }
+}
