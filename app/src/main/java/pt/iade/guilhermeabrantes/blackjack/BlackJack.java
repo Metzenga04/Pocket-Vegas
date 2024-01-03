@@ -21,21 +21,19 @@ import java.util.List;
 public class BlackJack extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
 
-    private SeekBar creditsBar;
-    private TextView creditsResult;
-    private TextView pTotalCredits;
-    private int playerBet;
-    public int maxBet;
+    private SeekBar creditsBarBJ;
+    private TextView creditsResultBJ, totalCreditsBJ;
+    private int playerBetBJ, maxBetBJ;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        creditsBar = (SeekBar) findViewById(R.id.seekBarCredits);
-        creditsResult = (TextView) findViewById(R.id.playerCredits);
-        pTotalCredits = (TextView) findViewById(R.id.totalCredits);
-        maxBet = creditsBar.getMax();
+        creditsBarBJ = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
+        creditsResultBJ = (TextView) findViewById(R.id.playerCreditsBJ);
+        totalCreditsBJ = (TextView) findViewById(R.id.totalCredits);
+        maxBetBJ = creditsBarBJ.getMax();
 
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
@@ -82,10 +80,10 @@ public class BlackJack extends AppCompatActivity {
         dCard5.setVisibility(View.GONE);
         split.setVisibility(View.GONE);
 
-        creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        creditsBarBJ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
-                creditsResult.setText("Apostar: " + credits);
+                creditsResultBJ.setText("Apostar: " + credits);
             }
 
             @Override
@@ -95,9 +93,9 @@ public class BlackJack extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                creditsResult.setText("Apostar: " + seekBar.getProgress());
-                playerBet = seekBar.getProgress();
-                seekBar.setMax(maxBet);
+                creditsResultBJ.setText("Apostar: " + seekBar.getProgress());
+                playerBetBJ = seekBar.getProgress();
+                seekBar.setMax(maxBetBJ);
             }
         });
 
@@ -107,18 +105,22 @@ public class BlackJack extends AppCompatActivity {
 
 
         start.setOnClickListener(v -> {
-            start.setVisibility(View.GONE);
+            if (playerBetBJ == 0) {
+                Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            split.setVisibility(View.VISIBLE);
             stand.setVisibility(View.VISIBLE);
             hit.setVisibility(View.VISIBLE);
             hit2.setVisibility(View.GONE);
             hit3.setVisibility(View.GONE);
-            split.setVisibility(View.VISIBLE);
+            start.setVisibility(View.GONE);
             leave.setVisibility(View.GONE);
-            creditsResult.setVisibility(View.GONE);
-            creditsBar.setVisibility(View.GONE);
+            creditsResultBJ.setVisibility(View.GONE);
+            creditsBarBJ.setVisibility(View.GONE);
 
-            maxBet -= playerBet;
-            pTotalCredits.setText("Créditos: " + String.valueOf(maxBet));
+            maxBetBJ -= playerBetBJ;
+            totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ));
 
             Card first = new Card();
             Card second = new Card();
@@ -215,16 +217,16 @@ public class BlackJack extends AppCompatActivity {
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
-                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                maxBet += 2 * playerBet;
+                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
+                maxBetBJ += 2 * playerBetBJ;
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
-                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                maxBet += 2 * playerBet;
+                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
+                maxBetBJ += 2 * playerBetBJ;
             } else if (pSum == dSum) {
                 Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
-                pTotalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                maxBet += playerBet;
+                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + playerBetBJ));
+                maxBetBJ += playerBetBJ;
             } else {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
@@ -354,8 +356,8 @@ public class BlackJack extends AppCompatActivity {
             pHand.clear();
             dHand.clear();
 
-            creditsResult.setVisibility(View.VISIBLE);
-            creditsBar.setVisibility(View.VISIBLE);
+            creditsResultBJ.setVisibility(View.VISIBLE);
+            creditsBarBJ.setVisibility(View.VISIBLE);
             start.setVisibility(View.VISIBLE);
             leave.setVisibility(View.VISIBLE);
             ok.setVisibility(View.GONE);

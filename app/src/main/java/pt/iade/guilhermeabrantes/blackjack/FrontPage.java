@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import pt.iade.guilhermeabrantes.blackjack.models.Session;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.SessionApi;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,10 +29,6 @@ public class FrontPage extends AppCompatActivity {
     private TextView playerCredits;
     public int totalCredits;
 
-    public void setTotalCredits(int credits) {
-        totalCredits = credits;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +36,7 @@ public class FrontPage extends AppCompatActivity {
 
         RetrofitService retrofitService = new RetrofitService();
         SessionApi sessionApi = retrofitService.getRetrofit().create(SessionApi.class);
+        UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
 
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
         btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
