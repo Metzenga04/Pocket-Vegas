@@ -11,6 +11,7 @@ import pt.iade.guilhermeabrantes.blackjack.models.Card;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar;
@@ -38,18 +39,39 @@ public class BlackJack extends AppCompatActivity {
 
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
+        List<Card> split1 = new ArrayList<>();
+        List<Card> split2 = new ArrayList<>();
 
         Button start = findViewById(R.id.btnStartBJ);
         Button stand = findViewById(R.id.btnStand);
+        Button standSplit = findViewById(R.id.btnStandSplit);
+        Button split = findViewById(R.id.btnSplit);
         Button hit = findViewById(R.id.btnHit);
         Button ok = findViewById(R.id.btnOk);
         Button leave = findViewById(R.id.btnExit);
         Button hit2 = findViewById(R.id.btnHit2);
         Button hit3 = findViewById(R.id.btnHitAgain);
-        Button split = findViewById(R.id.btnSplit);
+
+
+        LinearLayout linearSplit1 = findViewById(R.id.linearSplit1);
+        LinearLayout linearSplit2 = findViewById(R.id.linearSplit2);
+        LinearLayout linearPlayer = findViewById(R.id.linearPlayer);
 
         TextView playerPoints = findViewById(R.id.playerPoints);
         TextView dealerPoints = findViewById(R.id.dealerPoints);
+        TextView playerPointsSplit = findViewById(R.id.playerPointsSplit);
+
+        ImageView card1Split1 = findViewById(R.id.card1Split1);
+        ImageView card2Split1 = findViewById(R.id.card2Split1);
+        ImageView card3Split1 = findViewById(R.id.card3Split1);
+        ImageView card4Split1 = findViewById(R.id.card4Split1);
+        ImageView card5Split1 = findViewById(R.id.card5Split1);
+
+        ImageView card1Split2 = findViewById(R.id.card1Split2);
+        ImageView card2Split2 = findViewById(R.id.card2Split2);
+        ImageView card3Split2 = findViewById(R.id.card3Split2);
+        ImageView card4Split2 = findViewById(R.id.card4Split2);
+        ImageView card5Split2 = findViewById(R.id.card5Split2);
 
         ImageView card1 = findViewById(R.id.playerCard);
         ImageView card2 = findViewById(R.id.playerCard2);
@@ -80,6 +102,8 @@ public class BlackJack extends AppCompatActivity {
         dCard4.setVisibility(View.GONE);
         dCard5.setVisibility(View.GONE);
         split.setVisibility(View.GONE);
+        linearSplit1.setVisibility(View.GONE);
+        linearSplit2.setVisibility(View.GONE);
 
         creditsBarBJ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -136,6 +160,26 @@ public class BlackJack extends AppCompatActivity {
 
             card1.setVisibility(View.VISIBLE);
             card2.setVisibility(View.VISIBLE);
+
+            int pSum = 0;
+            int pAces = 0;
+            for (int i = 0; i < pHand.size(); i++) {
+                pSum += pHand.get(i).getRank();
+                if (pHand.get(i).getRank() == 11) {
+                    pAces++;
+                }
+            }
+            if (pSum > 21 && pAces > 0) {
+                pSum -= pAces * 10;
+            }
+
+            if (pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank()) {
+                split.setVisibility(View.VISIBLE);
+                split.setEnabled(true);
+            } else {
+                split.setVisibility(View.GONE);
+                split.setEnabled(false);
+            }
 
             Card dFirst = new Card();
             Card dSecond = new Card();
@@ -232,6 +276,29 @@ public class BlackJack extends AppCompatActivity {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
             ok.setVisibility(View.VISIBLE);
+        });
+        split.setOnClickListener(v -> {
+            stand.setVisibility(View.GONE);
+            hit.setVisibility(View.GONE);
+            split.setVisibility(View.GONE);
+            linearSplit1.setVisibility(View.VISIBLE);
+            linearSplit2.setVisibility(View.VISIBLE);
+            linearPlayer.setVisibility(View.GONE);
+            boolean splitDone = false;
+            if (pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank() && !splitDone) {
+
+                card1Split1.setImageResource(getResources().getIdentifier(pHand.get(0).getName(), "drawable", getPackageName()));
+
+                card1Split2.setImageResource(getResources().getIdentifier(pHand.get(1).getName(), "drawable", getPackageName()));
+
+                pHand.clear();
+
+                splitDone = true;
+            }
+        });
+
+        standSplit.setOnClickListener(v -> {
+
         });
 
         hit.setOnClickListener(v -> {
@@ -374,6 +441,8 @@ public class BlackJack extends AppCompatActivity {
             dCard5.setVisibility(View.GONE);
             dealerPoints.setVisibility(View.GONE);
             playerPoints.setVisibility(View.GONE);
+            linearSplit1.setVisibility(View.GONE);
+            linearSplit2.setVisibility(View.GONE);
         });
     }
 }
