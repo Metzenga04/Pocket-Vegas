@@ -160,26 +160,42 @@ public class BlackJack extends AppCompatActivity {
             boolean canHit = true;
             int dSum = 0;
             int dAces = 0;
-            while (canHit) {
-                dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
-                if (dSum <= 16) {
-                    Card toAdd = new Card();
-                    dHand.add(toAdd);
 
-                    dCard3.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
-                    dCard3.setVisibility(View.VISIBLE);
+            dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+            for (int i = 0; i < 2; i++) {
+                dSum += dHand.get(i).getRank();
+                if (dHand.get(i).getRank() == 11) {
+                    dAces++;
+                }
+            }
+            while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+                Card toAdd = new Card();
+                dHand.add(toAdd);
 
-                    for (int i = 0; i < dHand.size(); i++) {
-                        dSum += dHand.get(i).getRank();
-                        if (toAdd.getRank() == 11) {
-                            dAces++;
-                        }
-                        if (dSum > 21 && dAces > 0) {
-                            dSum -= dAces * 10;
-                        }
-                    }
-                } else {
-                    canHit = false;
+                int cardIndex = dHand.size() - 1;
+                int resourceId = getResources().getIdentifier(dHand.get(cardIndex).getName(), "drawable", getPackageName());
+                switch (cardIndex) {
+                    case 2:
+                        dCard3.setImageResource(resourceId);
+                        dCard3.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        dCard4.setImageResource(resourceId);
+                        dCard4.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        dCard5.setImageResource(resourceId);
+                        dCard5.setVisibility(View.VISIBLE);
+                        break;
+                }
+
+                dSum += toAdd.getRank();
+
+                if (toAdd.getRank() == 11) {
+                    dAces++;
+                }
+                if (dSum > 21 && dAces > 0) {
+                    dSum -= dAces * 10;
                 }
             }
             int pSum = 0;
