@@ -157,7 +157,7 @@ public class DiceGame extends AppCompatActivity {
             dDice4.setVisibility(View.VISIBLE);
             dDice5.setVisibility(View.VISIBLE);
 
-            int pSum = 0;
+            int pSum = chance(pHand);
             if (calculateYatzeeScore(pHand)) {
                 pSum = 50;
                 typeOfPointsP.setText("Yatzee!!!!");
@@ -169,7 +169,6 @@ public class DiceGame extends AppCompatActivity {
                     pSum= 30;
                     typeOfPointsP.setText("Small Straight!");
                 }else {
-                    pSum= chance(pHand);
                     typeOfPointsP.setText("Chance");
                 }
             } else if (calculateFullHouseScore(pHand)) {
@@ -177,20 +176,16 @@ public class DiceGame extends AppCompatActivity {
                     pSum= 25;
                     typeOfPointsP.setText("Full House!");
                 }else {
-                    pSum= chance(pHand);
                     typeOfPointsP.setText("Chance");
                 }
             } else if (isFourOfAKind(pHand)) {
                 typeOfPointsP.setText("Four of a kind!");
-                pSum= chance(pHand);
             } else if(isThreeOfAKind(pHand)) {
                 typeOfPointsP.setText("Three of a kind!");
-                pSum= chance(pHand);
             }else {
-                    pSum= chance(pHand);
-                    typeOfPointsP.setText("Chance");
-                }
-            int dSum = 0;
+                typeOfPointsP.setText("Chance");
+            }
+            int dSum = chance(dHand);
             if (calculateYatzeeScore(dHand)) {
                 dSum = 50;
                 typeOfPointsD.setText("Yatzee!!!!");
@@ -202,7 +197,6 @@ public class DiceGame extends AppCompatActivity {
                     dSum= 30;
                     typeOfPointsD.setText("Small Straight!");
                 }else {
-                    dSum= chance(dHand);
                     typeOfPointsD.setText("Chance");
                 }
             } else if (calculateFullHouseScore(dHand)) {
@@ -210,17 +204,13 @@ public class DiceGame extends AppCompatActivity {
                     dSum= 25;
                     typeOfPointsD.setText("Full House!");
                 }else {
-                    dSum= chance(dHand);
                     typeOfPointsD.setText("Chance");
                 }
             } else if (isFourOfAKind(dHand)) {
                 typeOfPointsD.setText("Four of a kind!");
-                dSum= chance(dHand);
             } else if(isThreeOfAKind(dHand)) {
                 typeOfPointsD.setText("Three of a kind!");
-                dSum= chance(dHand);
             }else {
-                dSum= chance(dHand);
                 typeOfPointsD.setText("Chance");
             }
             playerPoints.setText("Player: " + pSum);
