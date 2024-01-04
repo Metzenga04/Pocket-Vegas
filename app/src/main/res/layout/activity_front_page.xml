@@ -104,6 +104,7 @@
         android:layout_marginStart="130dp"
         android:layout_marginTop="35dp"
         android:text="Créditos: 1000"
+        android:textColor="@color/preto"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

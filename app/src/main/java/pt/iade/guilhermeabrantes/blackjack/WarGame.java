@@ -30,7 +30,7 @@ public class WarGame extends AppCompatActivity {
         betResultWG = (TextView) findViewById(R.id.playerBet);
         pCredits = (TextView) findViewById(R.id.playerCreditsTextView);
         cCredits = (TextView) findViewById(R.id.cpuCredits);
-        totalCreditsWG = (TextView) findViewById(R.id.totalCredits);
+        totalCreditsWG = (TextView) findViewById(R.id.totalCreditsBJ);
         tv_score_left = (TextView) findViewById(R.id.tv_score_left);
         tv_score_right = (TextView) findViewById(R.id.tv_score_right);
         iv_card_left = (ImageView) findViewById(R.id.iv_card_left);

@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
-import pt.iade.guilhermeabrantes.blackjack.models.User;
-import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
-import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
 
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +24,6 @@ public class BlackJack extends AppCompatActivity {
     private SeekBar creditsBarBJ;
     private TextView creditsResultBJ, totalCreditsBJ;
     private int playerBetBJ, maxBetBJ;
-    RetrofitService retrofitService = new RetrofitService();
-    UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
 
 
     @SuppressLint("MissingInflatedId")
@@ -38,7 +33,7 @@ public class BlackJack extends AppCompatActivity {
 
         creditsBarBJ = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
         creditsResultBJ = (TextView) findViewById(R.id.playerBetBJ);
-        totalCreditsBJ = (TextView) findViewById(R.id.totalCredits);
+        totalCreditsBJ = (TextView) findViewById(R.id.totalCreditsBJ);
         maxBetBJ = creditsBarBJ.getMax();
 
         List<Card> pHand = new ArrayList<>();
@@ -162,33 +157,27 @@ public class BlackJack extends AppCompatActivity {
             hit3.setVisibility(View.GONE);
             split.setVisibility(View.GONE);
 
-            dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
-
             boolean canHit = true;
-
+            int dSum = 0;
+            int dAces = 0;
             while (canHit) {
-                Card toAdd = new Card();
-                dHand.add(toAdd);
+                dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+                if (dSum <= 16) {
+                    Card toAdd = new Card();
+                    dHand.add(toAdd);
 
-                dCard2.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 2).getName(), "drawable", getPackageName()));
-                dCard3.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
+                    dCard3.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
+                    dCard3.setVisibility(View.VISIBLE);
 
-                dCard3.setVisibility(View.VISIBLE);
-
-                int sum = 0;
-                int dAces = 0;
-                for (int i = 0; i < dHand.size(); i++) {
-                    sum += dHand.get(i).getRank();
-                    if (dHand.get(i).getRank() == 11) {
-                        dAces++;
+                    for (int i = 0; i < dHand.size(); i++) {
+                        dSum += dHand.get(i).getRank();
+                        if (toAdd.getRank() == 11) {
+                            dAces++;
+                        }
+                        if (dSum > 21 && dAces > 0) {
+                            dSum -= dAces * 10;
+                        }
                     }
-                    if (sum > 21 && dAces > 0) {
-                        sum -= dAces * 10;
-                    }
-                }
-                if (sum < 17) {
-                    dCard4.setImageResource(getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName()));
-                    dCard4.setVisibility(View.VISIBLE);
                 } else {
                     canHit = false;
                 }
@@ -207,17 +196,6 @@ public class BlackJack extends AppCompatActivity {
             playerPoints.setText("Player: " + pSum);
             playerPoints.setVisibility(View.VISIBLE);
 
-            int dSum = 0;
-            int dAces = 0;
-            for (int i = 0; i < dHand.size(); i++) {
-                dSum += dHand.get(i).getRank();
-                if (dHand.get(1).getRank() == 11) {
-                    dAces++;
-                }
-            }
-            if (dSum > 21 && dAces > 0) {
-                dSum -= dAces * 10;
-            }
 
             dealerPoints.setText("Dealer: " + dSum);
             dealerPoints.setVisibility(View.VISIBLE);

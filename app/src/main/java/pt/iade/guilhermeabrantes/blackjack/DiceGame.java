@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class DiceGame extends AppCompatActivity {
     private Button ok;
     private Button btnRollDiceAgain;
     private Button btnRollDiceAgain2;
+    private SeekBar creditsBarDG;
+    private TextView creditsResultDG, totalCreditsDG;
+    private int playerBetDG, maxBetDG;
     List<Dices> pHand = new ArrayList<>();
     List<Dices> dHand = new ArrayList<>();
     @Override
@@ -34,6 +38,10 @@ public class DiceGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_game);
 
+        creditsBarDG = (SeekBar) findViewById(R.id.seekBarCreditsDG);
+        creditsResultDG = (TextView) findViewById(R.id.playerBetDG);
+        totalCreditsDG = (TextView) findViewById(R.id.totalCreditsDG);
+        maxBetDG = creditsBarDG.getMax();
         btnStartDG = (Button) findViewById(R.id.btnStardDG);
         btnRollDice = (Button) findViewById(R.id.btnRollDice);
         btnLeave = (Button) findViewById(R.id.btnLeave);
@@ -80,13 +88,40 @@ public class DiceGame extends AppCompatActivity {
         dDice4.setVisibility(View.GONE);
         dDice5.setVisibility(View.GONE);
 
+        creditsBarDG.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
+                creditsResultDG.setText("Apostar: " + credits);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                creditsResultDG.setText("Apostar: " + seekBar.getProgress());
+                playerBetDG = seekBar.getProgress();
+                seekBar.setMax(maxBetDG);
+            }
+        });
+
         btnLeave.setOnClickListener(v -> {
             startActivity(new Intent(DiceGame.this, FrontPage.class));
         });
         btnStartDG.setOnClickListener(v -> {
+            if (playerBetDG == 0) {
+                Toast.makeText(this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (playerBetDG > maxBetDG) {
+                Toast.makeText(this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             btnStartDG.setVisibility(View.GONE);
             btnRollDice.setVisibility(View.VISIBLE);
             btnLeave.setVisibility(View.GONE);
+            creditsResultDG.setVisibility(View.GONE);
+            creditsBarDG.setVisibility(View.GONE);
         });
         btnStay.setOnClickListener(v -> {
             btnStay.setVisibility(View.GONE);
@@ -94,6 +129,9 @@ public class DiceGame extends AppCompatActivity {
             btnRollDiceAgain2.setVisibility(View.GONE);
             typeOfPointsP.setVisibility(View.VISIBLE);
             typeOfPointsD.setVisibility(View.VISIBLE);
+
+            maxBetDG -= playerBetDG;
+            totalCreditsDG.setText("Créditos: " + String.valueOf(maxBetDG));
 
             Dices first = new Dices();
             Dices second = new Dices();
@@ -193,10 +231,15 @@ public class DiceGame extends AppCompatActivity {
 
             if (pSum > dSum) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
+                totalCreditsDG.setText("Créditos: " + String.valueOf(maxBetDG + (2 * playerBetDG)));
+                maxBetDG += 2 * playerBetDG;
             } else if (pSum==dSum){
                 Toast.makeText(this, "Dead End!", Toast.LENGTH_SHORT).show();
+                totalCreditsDG.setText("Créditos: " + String.valueOf(maxBetDG + playerBetDG));
+                maxBetDG += playerBetDG;
             }else{
                 Toast.makeText(this, "You Lose", Toast.LENGTH_SHORT).show();
+
             }
             ok.setVisibility(View.VISIBLE);
         });
@@ -299,6 +342,8 @@ public class DiceGame extends AppCompatActivity {
             pHand.clear();
             dHand.clear();
 
+            creditsResultDG.setVisibility(View.VISIBLE);
+            creditsBarDG.setVisibility(View.VISIBLE);
             btnStartDG.setVisibility(View.VISIBLE);
             btnLeave.setVisibility(View.VISIBLE);
             ok.setVisibility(View.GONE);

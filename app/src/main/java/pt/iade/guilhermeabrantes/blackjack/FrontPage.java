@@ -29,7 +29,6 @@ public class FrontPage extends AppCompatActivity {
     private int totalCredits;
     RetrofitService retrofitService = new RetrofitService();
     SessionApi sessionApi = retrofitService.getRetrofit().create(SessionApi.class);
-    UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class FrontPage extends AppCompatActivity {
         btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
         playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
 
+        totalCredits = 1000;
         playerCreditsTextView.setText("Créditos: " + String.valueOf(totalCredits));
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +73,40 @@ public class FrontPage extends AppCompatActivity {
         btnPlayWar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Session session = new Session();
+                sessionApi.save(session)
+                        .enqueue(new Callback<Session>() {
+                            @Override
+                            public void onResponse(Call<Session> call, Response<Session> response) {
+                                Toast.makeText(FrontPage.this, "Welcome to War Game.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Session> call, Throwable t) {
+                                Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                            }
+                        });
                 startActivity(new Intent(FrontPage.this, WarGame.class));
             }
         });
         btnPlayDice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Session session = new Session();
+                sessionApi.save(session)
+                        .enqueue(new Callback<Session>() {
+                            @Override
+                            public void onResponse(Call<Session> call, Response<Session> response) {
+                                Toast.makeText(FrontPage.this, "Welcome to Dice Game.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Session> call, Throwable t) {
+                                Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                            }
+                        });
                 startActivity(new Intent(FrontPage.this, DiceGame.class));
             }
         });
