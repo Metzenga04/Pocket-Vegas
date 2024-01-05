@@ -299,6 +299,8 @@ public class BlackJack extends AppCompatActivity {
 
                 card1Split1.setImageResource(getResources().getIdentifier(pHand.get(0).getName(), "drawable", getPackageName()));
                 card1Split2.setImageResource(getResources().getIdentifier(pHand.get(1).getName(), "drawable", getPackageName()));
+                card1Split1.setVisibility(View.VISIBLE);
+                card1Split2.setVisibility(View.VISIBLE);
 
                 pHand.clear();
 
@@ -656,9 +658,8 @@ public class BlackJack extends AppCompatActivity {
 
             if (pSumSplit > 21) {
                 Toast.makeText(BlackJack.this, "Lose first hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
-                stand.setVisibility(View.GONE);
+                standSplit.setVisibility(View.GONE);
                 hitSplit.setVisibility(View.GONE);
-                split.setVisibility(View.GONE);
 
                 if (!standSplit2Clicked && pSumSplit2 <= 21) {
                     ok.setVisibility(View.GONE);
