@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mesa_fundo"
+    android:background="@drawable/mesadefundo"
     tools:context=".WarGame">
 
     <TextView
-        android:id="@+id/playerBet"
+        android:id="@+id/playerBetWG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -39,7 +39,7 @@
         app:layout_constraintVertical_bias="0.542" />
 
     <Button
-        android:id="@+id/btnLeaveTable"
+        android:id="@+id/btnLeaveWG"
         android:layout_width="124dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutCards"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayoutCards2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -130,7 +130,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/playerCreditsTextView"
+        android:id="@+id/playerCredits"
         android:layout_width="150dp"
         android:layout_height="44dp"
         android:layout_marginStart="30dp"
@@ -161,7 +161,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/totalCreditsBJ"
+        android:id="@+id/totalCreditsWG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
@@ -178,6 +178,7 @@
         android:layout_height="48dp"
         android:backgroundTint="@color/preto"
         android:text="Start"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -190,6 +191,7 @@
         android:layout_marginTop="175dp"
         android:backgroundTint="@color/preto"
         android:text="Ok"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

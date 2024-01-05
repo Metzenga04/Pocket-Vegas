@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mesa_fundo"
+    android:background="@drawable/mesadefundo"
     tools:context=".DiceGame">
 
     <TextView
         android:id="@+id/totalCreditsDG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="30dp"
         android:text="Créditos: 1000"
         android:textColor="@color/branco"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayoutDealerDices"
         android:layout_width="380dp"
         android:layout_height="60dp"
         android:layout_marginStart="50dp"
@@ -74,7 +74,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayoutPlayerDices"
         android:layout_width="380dp"
         android:layout_height="60dp"
         android:layout_marginStart="50dp"
@@ -133,6 +133,7 @@
         android:layout_marginTop="380dp"
         android:backgroundTint="@color/preto"
         android:text="@string/ok"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -158,7 +159,6 @@
         android:id="@+id/playerBetDG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginBottom="300dp"
         android:text="Apostar: 0"
         android:textColor="@color/branco"
@@ -168,24 +168,26 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnStay"
+        android:id="@+id/btnStayDG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/preto"
         android:text="Stay"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnLeave"
+        android:id="@+id/btnLeaveDG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/preto"
         android:text="@string/leave_table"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -195,71 +197,49 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginEnd="150dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/preto"
         android:text="@string/roll"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnStardDG"
+        android:id="@+id/btnStartDG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/preto"
         android:text="@string/start"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dealer_points"
+        android:id="@+id/dealerPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/branco"
         android:layout_marginStart="150dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="150dp"
+        android:textColor="@color/branco"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDealerDices" />
 
     <TextView
-        android:id="@+id/player_points"
+        android:id="@+id/playerPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/branco"
         android:layout_marginStart="150dp"
         android:layout_marginEnd="150dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRollAgain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/preto"
-        android:text="Re-roll!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRollAgain2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/preto"
-        android:text="Re-roll"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/branco"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutPlayerDices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -269,7 +249,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginEnd="150dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="140dp"
         android:textColor="@color/branco"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnOkDG"
@@ -287,5 +267,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStardDG" />
+        app:layout_constraintTop_toBottomOf="@+id/btnStartDG" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,12 @@
 package pt.iade.guilhermeabrantes.blackjack;
 
+import pt.iade.guilhermeabrantes.blackjack.models.Card;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import pt.iade.guilhermeabrantes.blackjack.models.Card;
 
 import android.view.View;
 import android.widget.Button;
@@ -20,42 +20,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJack extends AppCompatActivity {
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"MissingInflatedId"})
 
-    private SeekBar creditsBarBJ;
-    private TextView creditsResultBJ, totalCreditsBJ;
-    private int playerBetBJ, maxBetBJ;
-
+    private SeekBar creditsBar;
+    private TextView betResult, totalCredits;
+    private Button start, stand, standSplit, standSplit2, split, hit, ok, leave, hitSplit, hitSplit2;
+    private int playerBet, maxBet, clickerCounterHit, clickerCounterHitSplit, clickerCounterHitSplit2, pSumSplit, pSumSplit2;
+    private Boolean standSplitClicked, standSplit2Clicked;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        creditsBarBJ = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
-        creditsResultBJ = (TextView) findViewById(R.id.playerBetBJ);
-        totalCreditsBJ = (TextView) findViewById(R.id.totalCreditsBJ);
-        maxBetBJ = creditsBarBJ.getMax();
+        creditsBar = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
 
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
         List<Card> split1 = new ArrayList<>();
         List<Card> split2 = new ArrayList<>();
 
-        Button start = findViewById(R.id.btnStartBJ);
-        Button stand = findViewById(R.id.btnStand);
-        Button standSplit = findViewById(R.id.btnStandSplit);
-        Button split = findViewById(R.id.btnSplit);
-        Button hit = findViewById(R.id.btnHit);
-        Button ok = findViewById(R.id.btnOk);
-        Button leave = findViewById(R.id.btnExit);
-        Button hit2 = findViewById(R.id.btnHit2);
-        Button hit3 = findViewById(R.id.btnHitAgain);
-        Button hitSplit1 = findViewById(R.id.btnHitSplit1);
-        Button hit2Split1 = findViewById(R.id.btnHit2Split1);
-        Button hitSplit2 = findViewById(R.id.btnHitSplit2);
-        Button hit2Split2 = findViewById(R.id.btnHit2Split2);
+        start = (Button) findViewById(R.id.btnStartBJ);
+        stand = (Button) findViewById(R.id.btnStand);
+        standSplit = (Button) findViewById(R.id.btnStandSplit1);
+        standSplit2 = (Button) findViewById(R.id.btnStandSplit2);
+        split = (Button) findViewById(R.id.btnSplit);
+        hit = (Button) findViewById(R.id.btnHit);
+        ok = (Button) findViewById(R.id.btnOk);
+        leave = (Button) findViewById(R.id.btnExit);
+        hitSplit = (Button) findViewById(R.id.btnHitSplit1);
+        hitSplit2 = (Button) findViewById(R.id.btnHitSplit2);
 
+        betResult = (TextView) findViewById(R.id.playerBetBJ);
+        totalCredits = (TextView) findViewById(R.id.totalCreditsBJ);
 
         LinearLayout linearSplit1 = findViewById(R.id.linearSplit1);
         LinearLayout linearSplit2 = findViewById(R.id.linearSplit2);
@@ -65,16 +62,6 @@ public class BlackJack extends AppCompatActivity {
         TextView dealerPoints = findViewById(R.id.dealerPoints);
         TextView playerPointsSplit = findViewById(R.id.playerPointsSplit);
         TextView playerPointsSplit2 = findViewById(R.id.playerPointsSplit2);
-
-        ImageView card1Split1 = findViewById(R.id.card1Split1);
-        ImageView card2Split1 = findViewById(R.id.card2Split1);
-        ImageView card3Split1 = findViewById(R.id.card3Split1);
-        ImageView card4Split1 = findViewById(R.id.card4Split1);
-
-        ImageView card1Split2 = findViewById(R.id.card1Split2);
-        ImageView card2Split2 = findViewById(R.id.card2Split2);
-        ImageView card3Split2 = findViewById(R.id.card3Split2);
-        ImageView card4Split2 = findViewById(R.id.card4Split2);
 
         ImageView card1 = findViewById(R.id.playerCard);
         ImageView card2 = findViewById(R.id.playerCard2);
@@ -88,18 +75,24 @@ public class BlackJack extends AppCompatActivity {
         ImageView dCard4 = findViewById(R.id.dealerCard4);
         ImageView dCard5 = findViewById(R.id.dealerCard5);
 
+        ImageView card1Split1 = findViewById(R.id.card1Split1);
+        ImageView card2Split1 = findViewById(R.id.card2Split1);
+        ImageView card3Split1 = findViewById(R.id.card3Split1);
+        ImageView card4Split1 = findViewById(R.id.card4Split1);
+
+        ImageView card1Split2 = findViewById(R.id.card1Split2);
+        ImageView card2Split2 = findViewById(R.id.card2Split2);
+        ImageView card3Split2 = findViewById(R.id.card3Split2);
+        ImageView card4Split2 = findViewById(R.id.card4Split2);
+
         start.setVisibility(View.VISIBLE);
         stand.setVisibility(View.GONE);
         standSplit.setVisibility(View.GONE);
-        hitSplit1.setVisibility(View.GONE);
-        hit2Split1.setVisibility(View.GONE);
-        hitSplit2.setVisibility(View.GONE);
-        hit2Split2.setVisibility(View.GONE);
-        linearSplit1.setVisibility(View.GONE);
-        linearSplit2.setVisibility(View.GONE);
+        standSplit2.setVisibility(View.GONE);
         hit.setVisibility(View.GONE);
-        hit2.setVisibility(View.GONE);
-        hit3.setVisibility(View.GONE);
+        hitSplit.setVisibility(View.GONE);
+        hitSplit2.setVisibility(View.GONE);
+        split.setVisibility(View.GONE);
         ok.setVisibility(View.GONE);
         card1.setVisibility(View.GONE);
         card2.setVisibility(View.GONE);
@@ -111,12 +104,15 @@ public class BlackJack extends AppCompatActivity {
         dCard3.setVisibility(View.GONE);
         dCard4.setVisibility(View.GONE);
         dCard5.setVisibility(View.GONE);
-        split.setVisibility(View.GONE);
+        linearSplit1.setVisibility(View.GONE);
+        linearSplit2.setVisibility(View.GONE);
 
-        creditsBarBJ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        maxBet = creditsBar.getMax();
+
+        creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
-                creditsResultBJ.setText("Apostar: " + credits);
+                betResult.setText("Apostar: " + credits);
             }
 
             @Override
@@ -125,9 +121,9 @@ public class BlackJack extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                creditsResultBJ.setText("Apostar: " + seekBar.getProgress());
-                playerBetBJ = seekBar.getProgress();
-                seekBar.setMax(maxBetBJ);
+                betResult.setText("Apostar: " + seekBar.getProgress());
+                playerBet = seekBar.getProgress();
+                seekBar.setMax(maxBet);
             }
         });
 
@@ -135,27 +131,30 @@ public class BlackJack extends AppCompatActivity {
             startActivity(new Intent(BlackJack.this, FrontPage.class));
         });
 
-
         start.setOnClickListener(v -> {
-            if (playerBetBJ == 0) {
-                Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (playerBetBJ > maxBetBJ) {
+            clickerCounterHit = 0;
+            clickerCounterHitSplit = 0;
+            clickerCounterHitSplit2 = 0;
+            pSumSplit = 0;
+            pSumSplit2 = 0;
+            standSplitClicked = false;
+            standSplit2Clicked = false;
+
+            if (playerBet == 0 || playerBet > maxBet) {
                 Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            split.setVisibility(View.VISIBLE);
+
             stand.setVisibility(View.VISIBLE);
             hit.setVisibility(View.VISIBLE);
-            hit2.setVisibility(View.GONE);
-            hit3.setVisibility(View.GONE);
+            split.setVisibility(View.GONE);
             start.setVisibility(View.GONE);
             leave.setVisibility(View.GONE);
-            creditsResultBJ.setVisibility(View.GONE);
-            creditsBarBJ.setVisibility(View.GONE);
+            betResult.setVisibility(View.GONE);
+            creditsBar.setVisibility(View.GONE);
 
-            maxBetBJ -= playerBetBJ;
-            totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ));
+            maxBet -= playerBet;
+            totalCredits.setText("Créditos: " + String.valueOf(maxBet));
 
             Card first = new Card();
             Card second = new Card();
@@ -169,25 +168,12 @@ public class BlackJack extends AppCompatActivity {
             card1.setVisibility(View.VISIBLE);
             card2.setVisibility(View.VISIBLE);
 
-            int pSum = 0;
-            int pAces = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                pSum += pHand.get(i).getRank();
-                if (pHand.get(i).getRank() == 11) {
-                    pAces++;
-                }
-            }
-            if (pSum > 21 && pAces > 0) {
-                pSum -= pAces * 10;
-            }
+            int pSum = handPoints(pHand);
 
             if (pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank()) {
                 split.setVisibility(View.VISIBLE);
-                split.setEnabled(true);
-            } else {
-                split.setVisibility(View.GONE);
-                split.setEnabled(false);
             }
+
             playerPoints.setText("Player: " + pSum);
             playerPoints.setVisibility(View.VISIBLE);
 
@@ -207,28 +193,28 @@ public class BlackJack extends AppCompatActivity {
         stand.setOnClickListener(v -> {
             stand.setVisibility(View.GONE);
             hit.setVisibility(View.GONE);
-            hit2.setVisibility(View.GONE);
-            hit3.setVisibility(View.GONE);
             split.setVisibility(View.GONE);
 
             boolean canHit = true;
+
+            dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+
             int dSum = 0;
             int dAces = 0;
 
-            dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
             for (int i = 0; i < 2; i++) {
                 dSum += dHand.get(i).getRank();
                 if (dHand.get(i).getRank() == 11) {
                     dAces++;
                 }
             }
-            while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+
+            while (canHit && (dSum < 17 || dSum == 17 && dAces > 0)) {
                 Card toAdd = new Card();
                 dHand.add(toAdd);
 
-                int cardIndex = dHand.size() - 1;
-                int resourceId = getResources().getIdentifier(dHand.get(cardIndex).getName(), "drawable", getPackageName());
-                switch (cardIndex) {
+                int resourceId = getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName());
+                switch (dHand.size() - 1) {
                     case 2:
                         dCard3.setImageResource(resourceId);
                         dCard3.setVisibility(View.VISIBLE);
@@ -252,443 +238,419 @@ public class BlackJack extends AppCompatActivity {
                     dSum -= dAces * 10;
                 }
             }
-            int pSum = 0;
-            int pAces = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                pSum += pHand.get(i).getRank();
-                if (pHand.get(i).getRank() == 11) {
-                    pAces++;
-                }
-            }
-            if (pSum > 21 && pAces > 0) {
-                pSum -= pAces * 10;
-            }
+
+            int pSum = handPoints(pHand);
+
             playerPoints.setText("Player: " + pSum);
             playerPoints.setVisibility(View.VISIBLE);
-
 
             dealerPoints.setText("Dealer: " + dSum);
             dealerPoints.setVisibility(View.VISIBLE);
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
-                maxBetBJ += 2 * playerBetBJ;
+                totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                maxBet += 2 * playerBet;
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
-                maxBetBJ += 2 * playerBetBJ;
+                totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                maxBet += 2 * playerBet;
             } else if (pSum == dSum) {
                 Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + playerBetBJ));
-                maxBetBJ += playerBetBJ;
+                totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                maxBet += playerBet;
             } else {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
+
             ok.setVisibility(View.VISIBLE);
         });
+
         split.setOnClickListener(v -> {
-            stand.setVisibility(View.GONE);
-            hitSplit1.setVisibility(View.VISIBLE);
+            hitSplit.setVisibility(View.VISIBLE);
             hitSplit2.setVisibility(View.VISIBLE);
-            standSplit.setVisibility(View.VISIBLE);
-            hit.setVisibility(View.GONE);
-            split.setVisibility(View.GONE);
             linearSplit1.setVisibility(View.VISIBLE);
             linearSplit2.setVisibility(View.VISIBLE);
+            standSplit.setVisibility(View.VISIBLE);
+            standSplit2.setVisibility(View.VISIBLE);
+            stand.setVisibility(View.GONE);
+            hit.setVisibility(View.GONE);
+            split.setVisibility(View.GONE);
             linearPlayer.setVisibility(View.GONE);
             playerPoints.setVisibility(View.GONE);
-            boolean splitDone = false;
-            // Verifica se o split ainda não foi realizado
-            if (!splitDone && pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank()) {
-                // Adiciona a primeira carta à lista split1
-                split1.add(pHand.get(0));
 
-                // Adiciona a segunda carta à lista split2
+            maxBet -= playerBet;
+            totalCredits.setText("Créditos: " + String.valueOf(maxBet));
+
+            if (pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank()) {
+                split1.add(pHand.get(0));
                 split2.add(pHand.get(1));
 
-                // Move a primeira carta para card1Split1
                 card1Split1.setImageResource(getResources().getIdentifier(pHand.get(0).getName(), "drawable", getPackageName()));
-
-                // Move a segunda carta para card1Split2
                 card1Split2.setImageResource(getResources().getIdentifier(pHand.get(1).getName(), "drawable", getPackageName()));
 
-                // Limpa a lista pHand
                 pHand.clear();
 
-                Card added = new Card();
-                split1.add(added);
+                Card toAdd = new Card();
+                split1.add(toAdd);
                 card2Split1.setImageResource(getResources().getIdentifier(split1.get(split1.size() - 1).getName(), "drawable", getPackageName()));
                 card2Split1.setVisibility(View.VISIBLE);
 
-                Card added2 = new Card();
-                split2.add(added2);
+                Card toAdd2 = new Card();
+                split2.add(toAdd2);
                 card2Split2.setImageResource(getResources().getIdentifier(split2.get(split2.size() - 1).getName(), "drawable", getPackageName()));
                 card2Split2.setVisibility(View.VISIBLE);
-                // Marca o split como concluído para evitar múltiplos splits
-                splitDone = true;
             }
+
+            pSumSplit = handPoints(split1);
+            pSumSplit2 = handPoints(split2);
+
+            playerPointsSplit.setText("Player: " + pSumSplit);
+            playerPointsSplit.setVisibility(View.VISIBLE);
+
+            playerPointsSplit2.setText("Player: " + pSumSplit2);
+            playerPointsSplit2.setVisibility(View.VISIBLE);
+
         });
 
         standSplit.setOnClickListener(v -> {
-
             standSplit.setVisibility(View.GONE);
-            hitSplit1.setVisibility(View.GONE);
-            hitSplit2.setVisibility(View.GONE);
-            hit2Split1.setVisibility(View.GONE);
-            hit2Split2.setVisibility(View.GONE);
+            hitSplit.setVisibility(View.GONE);
 
-            boolean canHit = true;
-            int dSum = 0;
-            int dAces = 0;
+            standSplitClicked = true;
 
-            dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
-            for (int i = 0; i < 2; i++) {
-                dSum += dHand.get(i).getRank();
-                if (dHand.get(i).getRank() == 11) {
-                    dAces++;
-                }
-            }
-            while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
-                Card toAdd = new Card();
-                dHand.add(toAdd);
+            pSumSplit = handPoints(split1);
 
-                int cardIndex = dHand.size() - 1;
-                int resourceId = getResources().getIdentifier(dHand.get(cardIndex).getName(), "drawable", getPackageName());
-                switch (cardIndex) {
-                    case 2:
-                        dCard3.setImageResource(resourceId);
-                        dCard3.setVisibility(View.VISIBLE);
-                        break;
-                    case 3:
-                        dCard4.setImageResource(resourceId);
-                        dCard4.setVisibility(View.VISIBLE);
-                        break;
-                    case 4:
-                        dCard5.setImageResource(resourceId);
-                        dCard5.setVisibility(View.VISIBLE);
-                        break;
-                }
-
-                dSum += toAdd.getRank();
-
-                if (toAdd.getRank() == 11) {
-                    dAces++;
-                }
-                if (dSum > 21 && dAces > 0) {
-                    dSum -= dAces * 10;
-                }
-            }
-
-            //pSum = Primeira mão
-            int pSum = 0;
-            int pAces = 0;
-            for (int i = 0; i < split1.size(); i++) {
-                pSum += split1.get(i).getRank();
-                if (split1.get(i).getRank() == 11) {
-                    pAces++;
-                }
-            }
-            if (pSum > 21 && pAces > 0) {
-                pSum -= pAces * 10;
-            }
-            playerPointsSplit.setText("Player: " + pSum);
+            playerPointsSplit.setText("Player: " + pSumSplit);
             playerPointsSplit.setVisibility(View.VISIBLE);
 
-            //pSum2 = Segunda mão
-            int pSum2 = 0;
-            int pAces2 = 0;
-            for (int i = 0; i < split2.size(); i++) {
-                pSum2 += split2.get(i).getRank();
-                if (split2.get(i).getRank() == 11) {
-                    pAces2++;
-                }
-            }
-            if (pSum2 > 21 && pAces2 > 0) {
-                pSum2 -= pAces2 * 10;
-            }
-            playerPointsSplit2.setText("Player: " + pSum2);
-            playerPointsSplit2.setVisibility(View.VISIBLE);
-
-
-            dealerPoints.setText("Dealer: " + dSum);
-            dealerPoints.setVisibility(View.VISIBLE);
-
-            /* if (dSum > 21) {
-                Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
-                maxBetBJ += 2 * playerBetBJ;
-            } else if (pSum > dSum) {
-                Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + (2 * playerBetBJ)));
-                maxBetBJ += 2 * playerBetBJ;
-            } else if (pSum == dSum) {
-                Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
-                totalCreditsBJ.setText("Créditos: " + String.valueOf(maxBetBJ + playerBetBJ));
-                maxBetBJ += playerBetBJ;
+            if (pSumSplit > 21) {
+                Toast.makeText(BlackJack.this, "Lose first hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
-            }
+                if (pSumSplit2 > 21 && !standSplit2Clicked || pSumSplit2 <= 21 && standSplit2Clicked) {
+                    boolean canHit = true;
+                    int dSum = 0;
+                    int dAces = 0;
 
-             */
-            ok.setVisibility(View.VISIBLE);
-        });
-        hitSplit1.setOnClickListener(v -> {
-            Card added = new Card();
-            split1.add(added);
+                    dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
 
-            card3Split1.setImageResource(getResources().getIdentifier(split1.get(split1.size() - 1).getName(), "drawable", getPackageName()));
+                    for (int i = 0; i < 2; i++) {
+                        dSum += dHand.get(i).getRank();
+                        if (dHand.get(i).getRank() == 11) {
+                            dAces++;
+                        }
+                    }
 
-            card3Split1.setVisibility(View.VISIBLE);
-            hitSplit1.setVisibility(View.GONE);
-            hit2Split1.setVisibility(View.VISIBLE);
+                    while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+                        Card toAdd = new Card();
+                        dHand.add(toAdd);
 
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < split1.size(); i++) {
-                sum += split1.get(i).getRank();
-                if (split1.get(i).getRank() == 11) {
-                    aceCtr++;
+                        int resourceId = getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName());
+                        switch (dHand.size() - 1) {
+                            case 2:
+                                dCard3.setImageResource(resourceId);
+                                dCard3.setVisibility(View.VISIBLE);
+                                break;
+                            case 3:
+                                dCard4.setImageResource(resourceId);
+                                dCard4.setVisibility(View.VISIBLE);
+                                break;
+
+                            case 4:
+                                dCard5.setImageResource(resourceId);
+                                dCard5.setVisibility(View.VISIBLE);
+                                break;
+                        }
+
+                        dSum += toAdd.getRank();
+
+                        if (toAdd.getRank() == 11) {
+                            dAces++;
+                        }
+                        if (dSum > 21 && dAces > 0) {
+                            dSum -= dAces * 10;
+                        }
+                    }
+
+                    dealerPoints.setText("Dealer: " + dSum);
+                    dealerPoints.setVisibility(View.VISIBLE);
+
+                    if (dSum > 21) {
+                        Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
+                        totalCredits.setText("Créditos: " + String.valueOf(maxBet + (4 * playerBet)));
+                        maxBet += 4 * playerBet;
+                    } else {
+                        if (dSum == pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                            maxBet += playerBet;
+                        } else if (dSum == pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                            maxBet += playerBet;
+                        } else if (dSum < pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                            maxBet += 2 * playerBet;
+                        } else if (dSum < pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                            maxBet += 2 * playerBet;
+                        } else if (dSum > pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum > pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Lose second hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPointsSplit.setText("Player: " + sum);
-            playerPointsSplit.setVisibility(View.VISIBLE);
-            if (sum > 21) {
 
-                Toast.makeText(BlackJack.this, "Lose first hand.Dealer Wins!", Toast.LENGTH_SHORT).show();
-
-                ok.setVisibility(View.VISIBLE);
-                hit2Split1.setVisibility(View.GONE);
-            }
-        });
-        hit2Split1.setOnClickListener(v -> {
-            Card added = new Card();
-            split1.add(added);
-
-            card4Split1.setImageResource(getResources().getIdentifier(split1.get(split1.size() - 1).getName(), "drawable", getPackageName()));
-
-            card4Split1.setVisibility(View.VISIBLE);
-            hit2Split1.setVisibility(View.GONE);
-
-
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < split1.size(); i++) {
-                sum += split1.get(i).getRank();
-                if (split1.get(i).getRank() == 11) {
-                    aceCtr++;
-                }
-            }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPointsSplit.setText("Player: " + sum);
-            playerPointsSplit.setVisibility(View.VISIBLE);
-            if (sum > 21) {
-
-                Toast.makeText(BlackJack.this, "Lose first hand. Dealer Wins!", Toast.LENGTH_SHORT).show();
-
+            if (standSplitClicked && !standSplit2Clicked) {
+                ok.setVisibility(View.GONE);
+            } else {
                 ok.setVisibility(View.VISIBLE);
             }
         });
-        hitSplit2.setOnClickListener(v -> {
-            Card added2 = new Card();
-            split2.add(added2);
 
-            card3Split2.setImageResource(getResources().getIdentifier(split2.get(split2.size() - 1).getName(), "drawable", getPackageName()));
-
-            card3Split2.setVisibility(View.VISIBLE);
-            hit2Split2.setVisibility(View.VISIBLE);
+        standSplit2.setOnClickListener(v -> {
+            standSplit2.setVisibility(View.GONE);
             hitSplit2.setVisibility(View.GONE);
 
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < split2.size(); i++) {
-                sum += split2.get(i).getRank();
-                if (split2.get(i).getRank() == 11) {
-                    aceCtr++;
+            standSplit2Clicked = true;
+
+            pSumSplit2 = handPoints(split2);
+
+            playerPointsSplit2.setText("Player: " + pSumSplit2);
+            playerPointsSplit2.setVisibility(View.VISIBLE);
+
+
+            if (pSumSplit2 > 21) {
+                Toast.makeText(BlackJack.this, "Lose second hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
+            } else {
+                if (pSumSplit > 21 && !standSplitClicked || pSumSplit <= 21 && standSplitClicked) {
+                    boolean canHit = true;
+                    int dSum = 0;
+                    int dAces = 0;
+
+                    dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+
+                    for (int i = 0; i < 2; i++) {
+                        dSum += dHand.get(i).getRank();
+                        if (dHand.get(i).getRank() == 11) {
+                            dAces++;
+                        }
+                    }
+
+                    while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+                        Card toAdd = new Card();
+                        dHand.add(toAdd);
+
+                        int resourceId = getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName());
+                        switch (dHand.size() - 1) {
+                            case 2:
+                                dCard3.setImageResource(resourceId);
+                                dCard3.setVisibility(View.VISIBLE);
+                                break;
+                            case 3:
+                                dCard4.setImageResource(resourceId);
+                                dCard4.setVisibility(View.VISIBLE);
+                                break;
+
+                            case 4:
+                                dCard5.setImageResource(resourceId);
+                                dCard5.setVisibility(View.VISIBLE);
+                                break;
+                        }
+
+                        dSum += toAdd.getRank();
+
+                        if (toAdd.getRank() == 11) {
+                            dAces++;
+                        }
+                        if (dSum > 21 && dAces > 0) {
+                            dSum -= dAces * 10;
+                        }
+                    }
+
+                    dealerPoints.setText("Dealer: " + dSum);
+                    dealerPoints.setVisibility(View.VISIBLE);
+
+                    if (dSum > 21) {
+                        Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
+                        totalCredits.setText("Créditos: " + String.valueOf(maxBet + (4 * playerBet)));
+                        maxBet += 4 * playerBet;
+                    } else {
+                        if (dSum == pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                            maxBet += playerBet;
+                        } else if (dSum == pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
+                            maxBet += playerBet;
+                        } else if (dSum < pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                            maxBet += 2 * playerBet;
+                        } else if (dSum < pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
+                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
+                            maxBet += 2 * playerBet;
+                        } else if (dSum > pSumSplit) {
+                            Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum > pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Lose second hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPointsSplit2.setText("Player: " + sum);
-            playerPointsSplit2.setVisibility(View.VISIBLE);
-            if (sum > 21) {
 
-                Toast.makeText(BlackJack.this, "Lose second hand. Dealer Wins!", Toast.LENGTH_SHORT).show();
-
-                hit2Split2.setVisibility(View.GONE);
-                ok.setVisibility(View.VISIBLE);
-            }
-        });
-        hit2Split2.setOnClickListener(v -> {
-            Card added2 = new Card();
-            split2.add(added2);
-
-            card4Split2.setImageResource(getResources().getIdentifier(split2.get(split2.size() - 1).getName(), "drawable", getPackageName()));
-
-            card4Split2.setVisibility(View.VISIBLE);
-            hit2Split2.setVisibility(View.GONE);
-
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < split2.size(); i++) {
-                sum += split2.get(i).getRank();
-                if (split2.get(i).getRank() == 11) {
-                    aceCtr++;
-                }
-            }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPointsSplit2.setText("Player: " + sum);
-            playerPointsSplit2.setVisibility(View.VISIBLE);
-            if (sum > 21) {
-
-                Toast.makeText(BlackJack.this, "Lose second hand. Dealer Wins!", Toast.LENGTH_SHORT).show();
-
-                hit2Split2.setVisibility(View.GONE);
+            if (!standSplitClicked && standSplit2Clicked) {
+                ok.setVisibility(View.GONE);
+            } else {
                 ok.setVisibility(View.VISIBLE);
             }
         });
 
         hit.setOnClickListener(v -> {
-            Card added = new Card();
-            pHand.add(added);
+            clickerCounterHit++;
 
-            card3.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 1).getName(), "drawable", getPackageName()));
-            card2.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 2).getName(), "drawable", getPackageName()));
-            card1.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 3).getName(), "drawable", getPackageName()));
+            Card toAdd = new Card();
+            pHand.add(toAdd);
 
-            card3.setVisibility(View.VISIBLE);
-            hit.setVisibility(View.GONE);
-            hit2.setVisibility(View.VISIBLE);
-            hit3.setVisibility(View.GONE);
-            split.setVisibility(View.GONE);
+            int visibleCardIndex = Math.min(clickerCounterHit, 3);
 
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                sum += pHand.get(i).getRank();
-                if (pHand.get(i).getRank() == 11) {
-                    aceCtr++;
-                }
+            ImageView newCard = null;
+            switch (visibleCardIndex) {
+                case 1:
+                    newCard = card3;
+                    break;
+                case 2:
+                    newCard = card4;
+                    break;
+                case 3:
+                    newCard = card5;
+                    hit.setVisibility(View.GONE);
+                    split.setVisibility(View.GONE);
+                    break;
             }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
+
+            newCard.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 1).getName(), "drawable", getPackageName()));
+            newCard.setVisibility(View.VISIBLE);
+
+            int sum = handPoints(pHand);
+
             playerPoints.setText("Player: " + sum);
             playerPoints.setVisibility(View.VISIBLE);
 
             if (sum > 21) {
-
                 Toast.makeText(BlackJack.this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
-
                 ok.setVisibility(View.VISIBLE);
                 stand.setVisibility(View.GONE);
                 hit.setVisibility(View.GONE);
-                hit2.setVisibility(View.GONE);
-                hit3.setVisibility(View.GONE);
                 split.setVisibility(View.GONE);
             }
         });
 
-        hit2.setOnClickListener(v -> {
-            Card added = new Card();
-            pHand.add(added);
+        hitSplit.setOnClickListener(v -> {
+            clickerCounterHitSplit++;
 
-            card4.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 1).getName(), "drawable", getPackageName()));
-            card3.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 2).getName(), "drawable", getPackageName()));
-            card2.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 3).getName(), "drawable", getPackageName()));
-            card1.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 4).getName(), "drawable", getPackageName()));
+            Card toAdd = new Card();
+            split1.add(toAdd);
 
-            card4.setVisibility(View.VISIBLE);
-            hit.setVisibility(View.GONE);
-            hit2.setVisibility(View.GONE);
-            hit3.setVisibility(View.VISIBLE);
+            int visibleCardIndex = Math.min(clickerCounterHitSplit, 2);
 
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                sum += pHand.get(i).getRank();
-                if (pHand.get(i).getRank() == 11) {
-                    aceCtr++;
-                }
+            ImageView newCard = null;
+            switch (visibleCardIndex) {
+                case 1:
+                    newCard = card3Split1;
+                    break;
+                case 2:
+                    newCard = card4Split1;
+                    hitSplit.setVisibility(View.GONE);
+                    split.setVisibility(View.GONE);
+                    break;
             }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPoints.setText("Player: " + sum);
-            playerPoints.setVisibility(View.VISIBLE);
 
-            if (sum > 21) {
+            newCard.setImageResource(getResources().getIdentifier(split1.get(split1.size() - 1).getName(), "drawable", getPackageName()));
+            newCard.setVisibility(View.VISIBLE);
 
-                Toast.makeText(BlackJack.this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
+            pSumSplit = handPoints(split1);
 
-                ok.setVisibility(View.VISIBLE);
+            playerPointsSplit.setText("Player: " + pSumSplit);
+            playerPointsSplit.setVisibility(View.VISIBLE);
+
+            if (pSumSplit > 21) {
+                Toast.makeText(BlackJack.this, "Lose first hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
                 stand.setVisibility(View.GONE);
-                hit.setVisibility(View.GONE);
-                hit2.setVisibility(View.GONE);
-                hit3.setVisibility(View.GONE);
+                hitSplit.setVisibility(View.GONE);
                 split.setVisibility(View.GONE);
+
+                if (!standSplit2Clicked && pSumSplit2 <= 21) {
+                    ok.setVisibility(View.GONE);
+                } else if (!standSplit2Clicked && pSumSplit2 > 21 || !standSplitClicked) {
+                    ok.setVisibility(View.VISIBLE);
+                }
             }
         });
 
-        hit3.setOnClickListener(v -> {
-            Card added = new Card();
-            pHand.add(added);
+        hitSplit2.setOnClickListener(v -> {
+            clickerCounterHitSplit2++;
 
-            card5.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 1).getName(), "drawable", getPackageName()));
-            card4.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 2).getName(), "drawable", getPackageName()));
-            card3.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 3).getName(), "drawable", getPackageName()));
-            card2.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 4).getName(), "drawable", getPackageName()));
-            card1.setImageResource(getResources().getIdentifier(pHand.get(pHand.size() - 5).getName(), "drawable", getPackageName()));
+            Card toAdd = new Card();
+            split2.add(toAdd);
 
-            card5.setVisibility(View.VISIBLE);
-            hit.setVisibility(View.GONE);
-            hit2.setVisibility(View.GONE);
-            hit3.setVisibility(View.GONE);
+            int visibleCardIndex = Math.min(clickerCounterHitSplit2, 2);
 
-            int sum = 0;
-            int aceCtr = 0;
-            for (int i = 0; i < pHand.size(); i++) {
-                sum += pHand.get(i).getRank();
-                if (pHand.get(i).getRank() == 11) {
-                    aceCtr++;
-                }
+            ImageView newCard = null;
+            switch (visibleCardIndex) {
+                case 1:
+                    newCard = card3Split2;
+                    break;
+
+                case 2:
+                    newCard = card4Split2;
+                    hitSplit2.setVisibility(View.GONE);
+                    split.setVisibility(View.GONE);
+                    break;
             }
-            if (sum > 21 && aceCtr > 0) {
-                sum -= aceCtr * 10;
-            }
-            playerPoints.setText("Player: " + sum);
-            playerPoints.setVisibility(View.VISIBLE);
 
-            if (sum > 21) {
+            newCard.setImageResource(getResources().getIdentifier(split2.get(split2.size() - 1).getName(), "drawable", getPackageName()));
+            newCard.setVisibility(View.VISIBLE);
 
-                Toast.makeText(this, "Bad luck. Dealer Wins!", Toast.LENGTH_SHORT).show();
+            pSumSplit2 = handPoints(split2);
 
-                ok.setVisibility(View.VISIBLE);
+            playerPointsSplit2.setText("Player: " + pSumSplit2);
+            playerPointsSplit2.setVisibility(View.VISIBLE);
+
+            if (pSumSplit2 > 21) {
+                Toast.makeText(BlackJack.this, "Lose second hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
+
                 stand.setVisibility(View.GONE);
-                hit.setVisibility(View.GONE);
-                hit2.setVisibility(View.GONE);
-                hit3.setVisibility(View.GONE);
+                hitSplit2.setVisibility(View.GONE);
+                split.setVisibility(View.GONE);
+
+                if (!standSplitClicked && pSumSplit <= 21) {
+                    ok.setVisibility(View.GONE);
+                } else if (!standSplitClicked && pSumSplit > 21 || !standSplit2Clicked) {
+                    ok.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         ok.setOnClickListener(v -> {
-
             Toast.makeText(this, "BlackJack", Toast.LENGTH_SHORT).show();
+
             pHand.clear();
             dHand.clear();
+            split1.clear();
+            split2.clear();
 
-            creditsResultBJ.setVisibility(View.VISIBLE);
-            creditsBarBJ.setVisibility(View.VISIBLE);
+            betResult.setVisibility(View.VISIBLE);
+            creditsBar.setVisibility(View.VISIBLE);
             start.setVisibility(View.VISIBLE);
             leave.setVisibility(View.VISIBLE);
+            linearPlayer.setVisibility(View.VISIBLE);
             ok.setVisibility(View.GONE);
             card1.setVisibility(View.GONE);
             card2.setVisibility(View.GONE);
@@ -706,7 +668,24 @@ public class BlackJack extends AppCompatActivity {
             playerPointsSplit2.setVisibility(View.GONE);
             linearSplit1.setVisibility(View.GONE);
             linearSplit2.setVisibility(View.GONE);
-            linearPlayer.setVisibility(View.VISIBLE);
         });
     }
+
+    public int handPoints(List<Card> hand) {
+        int sum = 0;
+        int aces = 0;
+
+        for (int i = 0; i < hand.size(); i++) {
+            sum += hand.get(i).getRank();
+            if (hand.get(i).getRank() == 11) {
+                aces++;
+            }
+        }
+        if (sum > 21 && aces > 0) {
+            sum -= aces * 10;
+        }
+        return sum;
+    }
 }
+
+
