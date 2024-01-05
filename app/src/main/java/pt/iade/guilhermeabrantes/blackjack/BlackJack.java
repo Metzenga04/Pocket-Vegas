@@ -68,22 +68,28 @@ public class BlackJack extends AppCompatActivity {
         ImageView card3 = findViewById(R.id.playerCard3);
         ImageView card4 = findViewById(R.id.playerCard4);
         ImageView card5 = findViewById(R.id.playerCard5);
+        ImageView card6 = findViewById(R.id.playerCard6);
 
         ImageView dCard1 = findViewById(R.id.dealerCard);
         ImageView dCard2 = findViewById(R.id.dealerCard2);
         ImageView dCard3 = findViewById(R.id.dealerCard3);
         ImageView dCard4 = findViewById(R.id.dealerCard4);
         ImageView dCard5 = findViewById(R.id.dealerCard5);
+        ImageView dCard6 = findViewById(R.id.dealerCard6);
 
         ImageView card1Split1 = findViewById(R.id.card1Split1);
         ImageView card2Split1 = findViewById(R.id.card2Split1);
         ImageView card3Split1 = findViewById(R.id.card3Split1);
         ImageView card4Split1 = findViewById(R.id.card4Split1);
+        ImageView card5Split1 = findViewById(R.id.card5Split1);
+        ImageView card6Split1 = findViewById(R.id.card6Split1);
 
         ImageView card1Split2 = findViewById(R.id.card1Split2);
         ImageView card2Split2 = findViewById(R.id.card2Split2);
         ImageView card3Split2 = findViewById(R.id.card3Split2);
         ImageView card4Split2 = findViewById(R.id.card4Split2);
+        ImageView card5Split2 = findViewById(R.id.card5Split2);
+        ImageView card6Split2 = findViewById(R.id.card6Split2);
 
         start.setVisibility(View.VISIBLE);
         stand.setVisibility(View.GONE);
@@ -99,11 +105,13 @@ public class BlackJack extends AppCompatActivity {
         card3.setVisibility(View.GONE);
         card4.setVisibility(View.GONE);
         card5.setVisibility(View.GONE);
+        card6.setVisibility(View.GONE);
         dCard1.setVisibility(View.GONE);
         dCard2.setVisibility(View.GONE);
         dCard3.setVisibility(View.GONE);
         dCard4.setVisibility(View.GONE);
         dCard5.setVisibility(View.GONE);
+        dCard6.setVisibility(View.GONE);
         linearSplit1.setVisibility(View.GONE);
         linearSplit2.setVisibility(View.GONE);
 
@@ -132,13 +140,13 @@ public class BlackJack extends AppCompatActivity {
         });
 
         start.setOnClickListener(v -> {
+            standSplitClicked = false;
+            standSplit2Clicked = false;
             clickerCounterHit = 0;
             clickerCounterHitSplit = 0;
             clickerCounterHitSplit2 = 0;
             pSumSplit = 0;
             pSumSplit2 = 0;
-            standSplitClicked = false;
-            standSplit2Clicked = false;
 
             if (playerBet == 0 || playerBet > maxBet) {
                 Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
@@ -164,7 +172,6 @@ public class BlackJack extends AppCompatActivity {
 
             card1.setImageResource(getResources().getIdentifier(first.getName(), "drawable", getPackageName()));
             card2.setImageResource(getResources().getIdentifier(second.getName(), "drawable", getPackageName()));
-
             card1.setVisibility(View.VISIBLE);
             card2.setVisibility(View.VISIBLE);
 
@@ -227,6 +234,10 @@ public class BlackJack extends AppCompatActivity {
                         dCard5.setImageResource(resourceId);
                         dCard5.setVisibility(View.VISIBLE);
                         break;
+                    case 5:
+                        dCard6.setImageResource(resourceId);
+                        dCard6.setVisibility(View.VISIBLE);
+                        break;
                 }
 
                 dSum += toAdd.getRank();
@@ -267,10 +278,10 @@ public class BlackJack extends AppCompatActivity {
         });
 
         split.setOnClickListener(v -> {
-            hitSplit.setVisibility(View.VISIBLE);
-            hitSplit2.setVisibility(View.VISIBLE);
             linearSplit1.setVisibility(View.VISIBLE);
             linearSplit2.setVisibility(View.VISIBLE);
+            hitSplit.setVisibility(View.VISIBLE);
+            hitSplit2.setVisibility(View.VISIBLE);
             standSplit.setVisibility(View.VISIBLE);
             standSplit2.setVisibility(View.VISIBLE);
             stand.setVisibility(View.GONE);
@@ -360,6 +371,10 @@ public class BlackJack extends AppCompatActivity {
                                 dCard5.setImageResource(resourceId);
                                 dCard5.setVisibility(View.VISIBLE);
                                 break;
+                            case 5:
+                                dCard6.setImageResource(resourceId);
+                                dCard6.setVisibility(View.VISIBLE);
+                                break;
                         }
 
                         dSum += toAdd.getRank();
@@ -405,9 +420,7 @@ public class BlackJack extends AppCompatActivity {
                 }
             }
 
-            if (standSplitClicked && !standSplit2Clicked) {
-                ok.setVisibility(View.GONE);
-            } else {
+            if (!standSplit2Clicked && pSumSplit2 > 21 || standSplit2Clicked && pSumSplit2 <= 21 && standSplitClicked && pSumSplit <= 21) {
                 ok.setVisibility(View.VISIBLE);
             }
         });
@@ -460,6 +473,11 @@ public class BlackJack extends AppCompatActivity {
                                 dCard5.setImageResource(resourceId);
                                 dCard5.setVisibility(View.VISIBLE);
                                 break;
+
+                            case 5:
+                                dCard6.setImageResource(resourceId);
+                                dCard6.setVisibility(View.VISIBLE);
+                                break;
                         }
 
                         dSum += toAdd.getRank();
@@ -505,9 +523,7 @@ public class BlackJack extends AppCompatActivity {
                 }
             }
 
-            if (!standSplitClicked && standSplit2Clicked) {
-                ok.setVisibility(View.GONE);
-            } else {
+            if (!standSplitClicked && pSumSplit > 21 || standSplit2Clicked && pSumSplit2 <= 21 && standSplitClicked && pSumSplit <= 21) {
                 ok.setVisibility(View.VISIBLE);
             }
         });
@@ -518,10 +534,8 @@ public class BlackJack extends AppCompatActivity {
             Card toAdd = new Card();
             pHand.add(toAdd);
 
-            int visibleCardIndex = Math.min(clickerCounterHit, 3);
-
             ImageView newCard = null;
-            switch (visibleCardIndex) {
+            switch (clickerCounterHit) {
                 case 1:
                     newCard = card3;
                     break;
@@ -530,6 +544,9 @@ public class BlackJack extends AppCompatActivity {
                     break;
                 case 3:
                     newCard = card5;
+                    break;
+                case 4:
+                    newCard = card6;
                     hit.setVisibility(View.GONE);
                     split.setVisibility(View.GONE);
                     break;
@@ -558,17 +575,20 @@ public class BlackJack extends AppCompatActivity {
             Card toAdd = new Card();
             split1.add(toAdd);
 
-            int visibleCardIndex = Math.min(clickerCounterHitSplit, 2);
-
             ImageView newCard = null;
-            switch (visibleCardIndex) {
+            switch (clickerCounterHitSplit) {
                 case 1:
                     newCard = card3Split1;
                     break;
                 case 2:
                     newCard = card4Split1;
+                    break;
+                case 3:
+                    newCard = card5Split1;
+                    break;
+                case 4:
+                    newCard = card6Split1;
                     hitSplit.setVisibility(View.GONE);
-                    split.setVisibility(View.GONE);
                     break;
             }
 
@@ -579,6 +599,60 @@ public class BlackJack extends AppCompatActivity {
 
             playerPointsSplit.setText("Player: " + pSumSplit);
             playerPointsSplit.setVisibility(View.VISIBLE);
+
+            if (standSplit2Clicked && pSumSplit2 <= 21 && pSumSplit > 21) {
+                boolean canHit = true;
+                int dSum = 0;
+                int dAces = 0;
+
+                dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+
+                for (int i = 0; i < 2; i++) {
+                    dSum += dHand.get(i).getRank();
+                    if (dHand.get(i).getRank() == 11) {
+                        dAces++;
+                    }
+                }
+
+                while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+                    Card dToAdd = new Card();
+                    dHand.add(dToAdd);
+
+                    int resourceId = getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName());
+                    switch (dHand.size() - 1) {
+                        case 2:
+                            dCard3.setImageResource(resourceId);
+                            dCard3.setVisibility(View.VISIBLE);
+                            break;
+                        case 3:
+                            dCard4.setImageResource(resourceId);
+                            dCard4.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 4:
+                            dCard5.setImageResource(resourceId);
+                            dCard5.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 5:
+                            dCard6.setImageResource(resourceId);
+                            dCard6.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
+                    dSum += toAdd.getRank();
+
+                    if (toAdd.getRank() == 11) {
+                        dAces++;
+                    }
+                    if (dSum > 21 && dAces > 0) {
+                        dSum -= dAces * 10;
+                    }
+                }
+
+                dealerPoints.setText("Dealer: " + dSum);
+                dealerPoints.setVisibility(View.VISIBLE);
+            }
 
             if (pSumSplit > 21) {
                 Toast.makeText(BlackJack.this, "Lose first hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
@@ -600,18 +674,20 @@ public class BlackJack extends AppCompatActivity {
             Card toAdd = new Card();
             split2.add(toAdd);
 
-            int visibleCardIndex = Math.min(clickerCounterHitSplit2, 2);
-
             ImageView newCard = null;
-            switch (visibleCardIndex) {
+            switch (clickerCounterHitSplit2) {
                 case 1:
                     newCard = card3Split2;
                     break;
-
                 case 2:
                     newCard = card4Split2;
+                    break;
+                case 3:
+                    newCard = card5Split2;
+                    break;
+                case 4:
+                    newCard = card6Split2;
                     hitSplit2.setVisibility(View.GONE);
-                    split.setVisibility(View.GONE);
                     break;
             }
 
@@ -622,6 +698,61 @@ public class BlackJack extends AppCompatActivity {
 
             playerPointsSplit2.setText("Player: " + pSumSplit2);
             playerPointsSplit2.setVisibility(View.VISIBLE);
+
+            if (standSplitClicked && pSumSplit <= 21 && pSumSplit2 > 21) {
+                boolean canHit = true;
+                int dSum = 0;
+                int dAces = 0;
+
+                dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
+
+                for (int i = 0; i < 2; i++) {
+                    dSum += dHand.get(i).getRank();
+                    if (dHand.get(i).getRank() == 11) {
+                        dAces++;
+                    }
+                }
+
+                while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
+
+                    Card dToAdd = new Card();
+                    dHand.add(dToAdd);
+
+                    int resourceId = getResources().getIdentifier(dHand.get(dHand.size() - 1).getName(), "drawable", getPackageName());
+                    switch (dHand.size() - 1) {
+                        case 2:
+                            dCard3.setImageResource(resourceId);
+                            dCard3.setVisibility(View.VISIBLE);
+                            break;
+                        case 3:
+                            dCard4.setImageResource(resourceId);
+                            dCard4.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 4:
+                            dCard5.setImageResource(resourceId);
+                            dCard5.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 5:
+                            dCard6.setImageResource(resourceId);
+                            dCard6.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
+                    dSum += toAdd.getRank();
+
+                    if (toAdd.getRank() == 11) {
+                        dAces++;
+                    }
+                    if (dSum > 21 && dAces > 0) {
+                        dSum -= dAces * 10;
+                    }
+                }
+
+                dealerPoints.setText("Dealer: " + dSum);
+                dealerPoints.setVisibility(View.VISIBLE);
+            }
 
             if (pSumSplit2 > 21) {
                 Toast.makeText(BlackJack.this, "Lose second hand! Dealer Wins!", Toast.LENGTH_SHORT).show();
@@ -641,10 +772,10 @@ public class BlackJack extends AppCompatActivity {
         ok.setOnClickListener(v -> {
             Toast.makeText(this, "BlackJack", Toast.LENGTH_SHORT).show();
 
-            pHand.clear();
-            dHand.clear();
             split1.clear();
             split2.clear();
+            pHand.clear();
+            dHand.clear();
 
             betResult.setVisibility(View.VISIBLE);
             creditsBar.setVisibility(View.VISIBLE);
@@ -657,11 +788,25 @@ public class BlackJack extends AppCompatActivity {
             card3.setVisibility(View.GONE);
             card4.setVisibility(View.GONE);
             card5.setVisibility(View.GONE);
+            card6.setVisibility(View.GONE);
             dCard1.setVisibility(View.GONE);
             dCard2.setVisibility(View.GONE);
             dCard3.setVisibility(View.GONE);
             dCard4.setVisibility(View.GONE);
             dCard5.setVisibility(View.GONE);
+            dCard6.setVisibility(View.GONE);
+            card1Split1.setVisibility(View.GONE);
+            card2Split1.setVisibility(View.GONE);
+            card3Split1.setVisibility(View.GONE);
+            card4Split1.setVisibility(View.GONE);
+            card5Split1.setVisibility(View.GONE);
+            card6Split1.setVisibility(View.GONE);
+            card1Split2.setVisibility(View.GONE);
+            card2Split2.setVisibility(View.GONE);
+            card3Split2.setVisibility(View.GONE);
+            card4Split2.setVisibility(View.GONE);
+            card5Split2.setVisibility(View.GONE);
+            card6Split2.setVisibility(View.GONE);
             dealerPoints.setVisibility(View.GONE);
             playerPoints.setVisibility(View.GONE);
             playerPointsSplit.setVisibility(View.GONE);
