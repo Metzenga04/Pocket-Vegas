@@ -1,9 +1,10 @@
 package pt.iade.guilhermeabrantes.blackjack.models;
 
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class User {
+public class User implements Serializable {
     private int id;
     private int credits;
     private Timestamp register_date;

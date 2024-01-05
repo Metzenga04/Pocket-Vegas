@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import pt.iade.guilhermeabrantes.blackjack.models.User;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
+import retrofit2.Retrofit;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,9 +29,7 @@ public class SignInPage extends AppCompatActivity {
     private Button btnSignIn;
     private EditText emailInputIn;
     private EditText passwordInputIn;
-
-
-
+    User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +40,8 @@ public class SignInPage extends AppCompatActivity {
         btnRegister = (Button) findViewById(R.id.btnRegister);
 
         RetrofitService retrofitService = new RetrofitService();
-        UserApi userApi = retrofitService.getRetrofit().create(UserApi.class);
+        Retrofit retrofit = retrofitService.getRetrofit();
+        UserApi userApi = retrofit.create(UserApi.class);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,19 +70,22 @@ public class SignInPage extends AppCompatActivity {
 
                                 if (userList != null) {
                                     boolean loginSuccessful = false;
+                                    int idAux = 0;
 
-                                    // Iterar sobre a lista de usuários para verificar as credenciais
                                     for (User user : userList) {
                                         if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                                            idAux = user.getId();
                                             loginSuccessful = true;
                                             break;
                                         }
                                     }
 
                                     if (loginSuccessful) {
-                                        // Credenciais válidas, redirecione para a próxima tela ou execute a lógica necessária
+                                        // Agora, você já tem o ID do usuário. Não é necessário fazer outra chamada para obter o usuário por ID.
                                         Toast.makeText(SignInPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignInPage.this, FrontPage.class));
+                                        Intent intent = new Intent(SignInPage.this, FrontPage.class);
+                                        intent.putExtra("userInfo", idAux);
+                                        SignInPage.this.startActivity(intent);
                                     } else {
                                         // Credenciais inválidas
                                         Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();

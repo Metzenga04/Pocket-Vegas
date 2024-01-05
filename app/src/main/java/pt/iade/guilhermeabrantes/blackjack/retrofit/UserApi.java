@@ -15,12 +15,12 @@ public interface UserApi {
     @GET("/user/get-all")
     Call<List<User>> getAllUsers();
 
-    @GET("/user/get-by-id/{userId}")
-    Call<User> getUserById(@Path("userId") int userId);
-
     @POST("/user/save")
     Call<User> save(@Body User user);
 
     @DELETE("/user/delete")
     Call<User> delete(@Body User user);
+
+    @GET("/user/{userId}")
+    Call<User> getUserById(@Path("userId") int userId);
 }

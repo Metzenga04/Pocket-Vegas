@@ -28,7 +28,7 @@ public class BlackJack extends AppCompatActivity {
     private int playerBet, maxBet, clickerCounterHit, clickerCounterHitSplit, clickerCounterHitSplit2, pSumSplit, pSumSplit2;
     private Boolean standSplitClicked, standSplit2Clicked;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
@@ -347,13 +347,6 @@ public class BlackJack extends AppCompatActivity {
 
                     dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
 
-                    for (int i = 0; i < 2; i++) {
-                        dSum += dHand.get(i).getRank();
-                        if (dHand.get(i).getRank() == 11) {
-                            dAces++;
-                        }
-                    }
-
                     while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
                         Card toAdd = new Card();
                         dHand.add(toAdd);
@@ -381,6 +374,12 @@ public class BlackJack extends AppCompatActivity {
 
                         dSum += toAdd.getRank();
 
+                        for (int i = 0; i < 2; i++) {
+                            dSum += dHand.get(i).getRank();
+                            if (dHand.get(i).getRank() == 11) {
+                                dAces++;
+                            }
+                        }
                         if (toAdd.getRank() == 11) {
                             dAces++;
                         }
@@ -449,13 +448,6 @@ public class BlackJack extends AppCompatActivity {
 
                     dCard2.setImageResource(getResources().getIdentifier(dHand.get(1).getName(), "drawable", getPackageName()));
 
-                    for (int i = 0; i < 2; i++) {
-                        dSum += dHand.get(i).getRank();
-                        if (dHand.get(i).getRank() == 11) {
-                            dAces++;
-                        }
-                    }
-
                     while (canHit && (dSum < 17 || (dSum == 17 && dAces > 0))) {
                         Card toAdd = new Card();
                         dHand.add(toAdd);
@@ -484,6 +476,12 @@ public class BlackJack extends AppCompatActivity {
 
                         dSum += toAdd.getRank();
 
+                        for (int i = 0; i < 2; i++) {
+                            dSum += dHand.get(i).getRank();
+                            if (dHand.get(i).getRank() == 11) {
+                                dAces++;
+                            }
+                        }
                         if (toAdd.getRank() == 11) {
                             dAces++;
                         }

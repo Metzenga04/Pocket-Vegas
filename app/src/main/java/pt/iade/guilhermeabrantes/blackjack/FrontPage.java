@@ -3,12 +3,14 @@ package pt.iade.guilhermeabrantes.blackjack;
 import androidx.appcompat.app.AppCompatActivity;
 
 import pt.iade.guilhermeabrantes.blackjack.models.Session;
+import pt.iade.guilhermeabrantes.blackjack.models.User;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.SessionApi;
 import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,12 +30,21 @@ public class FrontPage extends AppCompatActivity {
     private TextView playerCreditsTextView;
     private int totalCredits;
     RetrofitService retrofitService = new RetrofitService();
-    SessionApi sessionApi = retrofitService.getRetrofit().create(SessionApi.class);
+    Retrofit retrofit = retrofitService.getRetrofit();
+    UserApi userApi = retrofit.create(UserApi.class);
+    SessionApi sessionApi = retrofit.create(SessionApi.class);
+
+    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
+
+        // Recuperar o ID do usuário da intent
+        //int userInfo = getIntent().getIntExtra("userInfo", -1);
+        //user = userApi.getUserById(userInfo);
+
 
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
         btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
@@ -41,7 +52,7 @@ public class FrontPage extends AppCompatActivity {
         btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
         playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
 
-        totalCredits = 1000;
+        totalCredits = user.getCredits();
         playerCreditsTextView.setText("Créditos: " + String.valueOf(totalCredits));
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
