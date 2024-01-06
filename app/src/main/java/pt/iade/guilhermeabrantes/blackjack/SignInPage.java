@@ -29,6 +29,7 @@ public class SignInPage extends AppCompatActivity {
     private Button btnSignIn;
     private EditText emailInputIn;
     private EditText passwordInputIn;
+    private int userId;
     RetrofitService retrofitService = new RetrofitService();
     Retrofit retrofit = retrofitService.getRetrofit();
     private UserApi userApi;
@@ -113,8 +114,6 @@ public class SignInPage extends AppCompatActivity {
     }
     private void handleLoginResponse(List<User> userList, String email, String password) {
         boolean loginSuccessful = false;
-        int userId = 0;
-
         if (userList != null) {
             for (User user : userList) {
                 if (user != null && user.getEmail() != null && user.getPassword() != null) {
@@ -128,41 +127,17 @@ public class SignInPage extends AppCompatActivity {
         }
 
         if (loginSuccessful) {
-            navigateToNextActivity(userId);
+            navigateToNextActivity();
         } else {
             // Credenciais inválidas ou lista de usuários nula
             Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
-    private void navigateToNextActivity(int userId) {
+    private void navigateToNextActivity() {
         Toast.makeText(SignInPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SignInPage.this, FrontPage.class);
         intent.putExtra("userInfo", userId);
         SignInPage.this.startActivity(intent);
-    }
-
-    private void saveUpdatedCredits(User user) {
-        userApi.save(user).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    // Créditos do usuário atualizados com sucesso
-                    Toast.makeText(SignInPage.this, "Credits updated successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Trate o caso em que a resposta não foi bem-sucedida
-                    // Exemplo: exibir uma mensagem de erro
-                    Toast.makeText(SignInPage.this, "Failed to update credits", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                // Trate o caso de falha na chamada
-                // Exemplo: exibir uma mensagem de erro
-                Toast.makeText(SignInPage.this, "Failed to update credits", Toast.LENGTH_SHORT).show();
-                Logger.getLogger(SignInPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
-            }
-        });
     }
 
 }

@@ -26,7 +26,6 @@
         android:layout_width="281dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:max="1000"
         android:progress="0"
         android:progressTint="@color/branco"
         android:scaleX="1.3"

@@ -13,6 +13,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +30,8 @@ public class FrontPage extends AppCompatActivity {
     private Button btnPlayDice;
     private TextView playerCreditsTextView;
     private int totalCredits;
-    private int userId;
+    private int userId, userCredits;
+    private String userEmail, userPassword, userName, userSurname;
     private UserApi userApi;
     RetrofitService retrofitService = new RetrofitService();
     Retrofit retrofit = retrofitService.getRetrofit();
@@ -42,17 +44,34 @@ public class FrontPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
 
+        btnLogOff = (Button) findViewById(R.id.btnLogOff);
+        btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
+        btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
+        btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
+        playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
+
+        if (getIntent().hasExtra("userId")) {
+            userId = getIntent().getIntExtra("userId", 0);
+            userCredits = getIntent().getIntExtra("userCredits", 0);
+            userEmail = getIntent().getStringExtra("userEmail");
+            userPassword = getIntent().getStringExtra("userPassword");
+            userName = getIntent().getStringExtra("userName");
+            userSurname = getIntent().getStringExtra("userSurname");
+
+            // Atualiza a interface do usuário com os novos dados
+            updateTotalCredits(userCredits);
+        }
+
         RetrofitService retrofitService = new RetrofitService();
         userApi = retrofitService.getRetrofit().create(UserApi.class);
 
-        int userId = getIntent().getIntExtra("userInfo", 0);
+        userId = getIntent().getIntExtra("userInfo", 0);
         userApi.getUserById(userId).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    int credits = user.getCredits();
-                    playerCreditsTextView.setText("Créditos: " + credits);
+                    playerCreditsTextView.setText("Crédits: " + user.getCredits());
                 }
             }
             @Override
@@ -61,19 +80,14 @@ public class FrontPage extends AppCompatActivity {
                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
             }
         });
-        btnLogOff = (Button) findViewById(R.id.btnLogOff);
-        btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
-        btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
-        btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
-        playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
 
         totalCredits = user.getCredits();
-        playerCreditsTextView.setText("Créditos: " + String.valueOf(totalCredits));
 
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(FrontPage.this, SignInPage.class));
+
             }
         });
         btnPlayBlack.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +116,7 @@ public class FrontPage extends AppCompatActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
                             User detailedUser = response.body();
-                            navigateToBlackjackActivity(userId, detailedUser.getCredits());
+                            navigateToBlackjackActivity(userId, detailedUser.getCredits(),detailedUser.getEmail(),detailedUser.getPassword(),detailedUser.getName(),detailedUser.getSurname());
                         } else {
                             Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
                         }
@@ -157,12 +171,18 @@ public class FrontPage extends AppCompatActivity {
             }
         });
     }
-    private void navigateToBlackjackActivity(int userId, int userCredits) {
-        Toast.makeText(FrontPage.this, "Navigating to BlackjackActivity", Toast.LENGTH_SHORT).show();
+    private void navigateToBlackjackActivity(int userId, int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
         Intent intent = new Intent(FrontPage.this, BlackJack.class);
         intent.putExtra("userId", userId);
         intent.putExtra("userCredits", userCredits);
+        intent.putExtra("userEmail", userEmail);
+        intent.putExtra("userPassword", userPassword);
+        intent.putExtra("userName", userName);
+        intent.putExtra("userSurname", userSurname);
         FrontPage.this.startActivity(intent);
     }
-
+    private void updateTotalCredits(int credits) {
+        // Atualize o texto da TextView com os créditos do usuário
+        playerCreditsTextView.setText("Credits: " + credits);
+    }
 }

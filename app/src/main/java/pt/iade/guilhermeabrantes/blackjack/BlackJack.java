@@ -30,6 +30,7 @@ import java.util.List;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import android.content.SharedPreferences;
 
 public class BlackJack extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId"})
@@ -38,6 +39,7 @@ public class BlackJack extends AppCompatActivity {
     private TextView betResult, totalCredits;
     private Button start, stand, standSplit, standSplit2, split, hit, ok, leave, hitSplit, hitSplit2;
     private int playerBet, userId, userCredits, clickerCounterHit, clickerCounterHitSplit, clickerCounterHitSplit2, pSumSplit, pSumSplit2;
+    private String userEmail, userPassword, userName, userSurname;
     private Boolean standSplitClicked, standSplit2Clicked;
     User user = new User();
     RetrofitService retrofitService = new RetrofitService();
@@ -130,19 +132,24 @@ public class BlackJack extends AppCompatActivity {
         linearSplit1.setVisibility(View.GONE);
         linearSplit2.setVisibility(View.GONE);
 
-        userCredits = creditsBar.getMax();
+        creditsBar.setMax(userCredits);
 
         Intent intent = getIntent();
-        int userId = intent.getIntExtra("userId", 0);
+        userId = intent.getIntExtra("userId", 0);
         userCredits = intent.getIntExtra("userCredits", 0);
+        userEmail = intent.getStringExtra("userEmail");
+        userPassword = intent.getStringExtra("userPassword");
+        userName = intent.getStringExtra("userName");
+        userSurname = intent.getStringExtra("userSurname");
 
-        loadUserData();
+
+
         updateTotalCredits(userCredits);
 
         creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar,int credits, boolean b) {
-                betResult.setText("Apostar: " + credits);
+                betResult.setText("Bet: " + credits);
             }
 
             @Override
@@ -151,14 +158,34 @@ public class BlackJack extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                betResult.setText("Bet: " + seekBar.getProgress());
                 playerBet = seekBar.getProgress();
                 seekBar.setMax(userCredits);
             }
         });
 
         leave.setOnClickListener(v -> {
-            saveUpdatedCredits(userId, userCredits);
-            startActivity(new Intent(BlackJack.this, FrontPage.class));
+            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
+            Intent intentleave = new Intent(BlackJack.this, FrontPage.class);
+            intentleave.putExtra("userId", userId);
+            intentleave.putExtra("userCredits", userCredits);
+            intentleave.putExtra("userEmail", userEmail);
+            intentleave.putExtra("userPassword", userPassword);
+            intentleave.putExtra("userName", userName);
+            intentleave.putExtra("userSurname", userSurname);
+
+            startActivity(intentleave);
+            saveUserInfoToSharedPreferences(userId, userCredits, userEmail, userPassword, userName, userSurname);
+
+            retrieveUserInfoFromSharedPreferences();
+
+            startActivity(new Intent(BlackJack.this, FrontPage.class)
+                    .putExtra("userId", userId)
+                    .putExtra("userCredits", userCredits)
+                    .putExtra("userEmail", userEmail)
+                    .putExtra("userPassword", userPassword)
+                    .putExtra("userName", userName)
+                    .putExtra("userSurname", userSurname));
         });
 
         start.setOnClickListener(v -> {
@@ -184,6 +211,7 @@ public class BlackJack extends AppCompatActivity {
             creditsBar.setVisibility(View.GONE);
 
             userCredits -= playerBet;
+            updateTotalCredits(userCredits);
 
             Card first = new Card();
             Card second = new Card();
@@ -855,10 +883,14 @@ public class BlackJack extends AppCompatActivity {
         // Atualize o texto da TextView com os créditos do usuário
         totalCredits.setText("Credits: " + credits);
     }
-    private void saveUpdatedCredits(int userId, int credits) {
+    private void saveUpdatedCredits(int userId, int credits, String email, String password, String name, String surname) {
         User user = new User();
         user.setId(userId);
         user.setCredits(credits);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setName(name);
+        user.setSurname(surname);
 
         userApi.save(user).enqueue(new Callback<User>() {
             @Override
@@ -876,29 +908,30 @@ public class BlackJack extends AppCompatActivity {
             }
         });
     }
+    private void saveUserInfoToSharedPreferences(int userId, int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
-    private void loadUserData() {
-        UserApi userApi = retrofit.create(UserApi.class);
-                userApi.getUserById(userId).enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            User user = response.body();
-                            int userCredits = user.getCredits();
+        editor.putInt("userId", userId);
+        editor.putInt("userCredits", userCredits);
+        editor.putString("userEmail", userEmail);
+        editor.putString("userPassword", userPassword);
+        editor.putString("userName", userName);
+        editor.putString("userSurname", userSurname);
 
-                            updateTotalCredits(userCredits);
-                        } else {
-                            Toast.makeText(BlackJack.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(BlackJack.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
-                        Logger.getLogger(BlackJack.class.getName()).log(Level.SEVERE, "Error Occurred", t);
-                    }
-                });
+        editor.apply();
     }
+
+    private void retrieveUserInfoFromSharedPreferences() {
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        userId = preferences.getInt("userId", 0);
+        userCredits = preferences.getInt("userCredits", 0);
+        userEmail = preferences.getString("userEmail", "");
+        userPassword = preferences.getString("userPassword", "");
+        userName = preferences.getString("userName", "");
+        userSurname = preferences.getString("userSurname", "");
+    }
+
 }
 
 

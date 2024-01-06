@@ -73,6 +73,7 @@ public class SignUpPage extends AppCompatActivity {
                 String surname = String.valueOf(surnameInputUp.getText());
 
                 User user = new User();
+                user.setCredits(1000);
                 user.setName(name);
                 user.setEmail(email);
                 user.setPassword(password);
