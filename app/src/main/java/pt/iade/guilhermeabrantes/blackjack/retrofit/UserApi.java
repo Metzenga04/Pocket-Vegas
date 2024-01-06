@@ -23,4 +23,6 @@ public interface UserApi {
 
     @GET("/user/{userId}")
     Call<User> getUserById(@Path("userId") int userId);
+    @GET("/user/{userId}/details")
+    Call<User> getUserDetailsById(@Path("userId") int userId);
 }

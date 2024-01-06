@@ -29,9 +29,10 @@ public class FrontPage extends AppCompatActivity {
     private Button btnPlayDice;
     private TextView playerCreditsTextView;
     private int totalCredits;
+    private int userId;
+    private UserApi userApi;
     RetrofitService retrofitService = new RetrofitService();
     Retrofit retrofit = retrofitService.getRetrofit();
-    UserApi userApi = retrofit.create(UserApi.class);
     SessionApi sessionApi = retrofit.create(SessionApi.class);
 
     User user = new User();
@@ -41,11 +42,25 @@ public class FrontPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
 
-        // Recuperar o ID do usuário da intent
-        //int userInfo = getIntent().getIntExtra("userInfo", -1);
-        //user = userApi.getUserById(userInfo);
+        RetrofitService retrofitService = new RetrofitService();
+        userApi = retrofitService.getRetrofit().create(UserApi.class);
 
-
+        int userId = getIntent().getIntExtra("userInfo", 0);
+        userApi.getUserById(userId).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    User user = response.body();
+                    int credits = user.getCredits();
+                    playerCreditsTextView.setText("Créditos: " + credits);
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(FrontPage.this, "Failed to get user data", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+            }
+        });
         btnLogOff = (Button) findViewById(R.id.btnLogOff);
         btnPlayBlack = (Button) findViewById(R.id.btnBjPlay);
         btnPlayWar = (Button) findViewById(R.id.btnWgPlay);
@@ -78,7 +93,27 @@ public class FrontPage extends AppCompatActivity {
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
-                startActivity(new Intent(FrontPage.this, BlackJack.class));
+
+                RetrofitService retrofitService = new RetrofitService();
+                userApi = retrofitService.getRetrofit().create(UserApi.class);
+                int userId = getIntent().getIntExtra("userInfo", 0);
+                userApi.getUserById(userId).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            User detailedUser = response.body();
+                            navigateToBlackjackActivity(userId, detailedUser.getCredits());
+                        } else {
+                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                    }
+                });
             }
         });
         btnPlayWar.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +156,13 @@ public class FrontPage extends AppCompatActivity {
                 startActivity(new Intent(FrontPage.this, DiceGame.class));
             }
         });
-
     }
+    private void navigateToBlackjackActivity(int userId, int userCredits) {
+        Toast.makeText(FrontPage.this, "Navigating to BlackjackActivity", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(FrontPage.this, BlackJack.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("userCredits", userCredits);
+        FrontPage.this.startActivity(intent);
+    }
+
 }

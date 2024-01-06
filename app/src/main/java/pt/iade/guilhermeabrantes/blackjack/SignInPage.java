@@ -29,6 +29,10 @@ public class SignInPage extends AppCompatActivity {
     private Button btnSignIn;
     private EditText emailInputIn;
     private EditText passwordInputIn;
+    RetrofitService retrofitService = new RetrofitService();
+    Retrofit retrofit = retrofitService.getRetrofit();
+    private UserApi userApi;
+
     User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,39 +65,12 @@ public class SignInPage extends AppCompatActivity {
                 } else {
                     String email = String.valueOf(emailInputIn.getText());
                     String password = String.valueOf(passwordInputIn.getText());
-
                     userApi.getAllUsers().enqueue(new Callback<List<User>>() {
                         @Override
                         public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                             if (response.isSuccessful()) {
                                 List<User> userList = response.body();
-
-                                if (userList != null) {
-                                    boolean loginSuccessful = false;
-                                    int idAux = 0;
-
-                                    for (User user : userList) {
-                                        if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                                            idAux = user.getId();
-                                            loginSuccessful = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (loginSuccessful) {
-                                        // Agora, você já tem o ID do usuário. Não é necessário fazer outra chamada para obter o usuário por ID.
-                                        Toast.makeText(SignInPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(SignInPage.this, FrontPage.class);
-                                        intent.putExtra("userInfo", idAux);
-                                        SignInPage.this.startActivity(intent);
-                                    } else {
-                                        // Credenciais inválidas
-                                        Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    // A lista de usuários está vazia ou nula
-                                    Toast.makeText(SignInPage.this, "No users found.", Toast.LENGTH_SHORT).show();
-                                }
+                                handleLoginResponse(userList, email, password);
                             } else {
                                 // Resposta sem sucesso
                                 Toast.makeText(SignInPage.this, "Failed to load user data.", Toast.LENGTH_SHORT).show();
@@ -134,4 +111,58 @@ public class SignInPage extends AppCompatActivity {
             return false;
         }
     }
+    private void handleLoginResponse(List<User> userList, String email, String password) {
+        boolean loginSuccessful = false;
+        int userId = 0;
+
+        if (userList != null) {
+            for (User user : userList) {
+                if (user != null && user.getEmail() != null && user.getPassword() != null) {
+                    if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                        userId = user.getId();
+                        loginSuccessful = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (loginSuccessful) {
+            navigateToNextActivity(userId);
+        } else {
+            // Credenciais inválidas ou lista de usuários nula
+            Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void navigateToNextActivity(int userId) {
+        Toast.makeText(SignInPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SignInPage.this, FrontPage.class);
+        intent.putExtra("userInfo", userId);
+        SignInPage.this.startActivity(intent);
+    }
+
+    private void saveUpdatedCredits(User user) {
+        userApi.save(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // Créditos do usuário atualizados com sucesso
+                    Toast.makeText(SignInPage.this, "Credits updated successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Trate o caso em que a resposta não foi bem-sucedida
+                    // Exemplo: exibir uma mensagem de erro
+                    Toast.makeText(SignInPage.this, "Failed to update credits", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // Trate o caso de falha na chamada
+                // Exemplo: exibir uma mensagem de erro
+                Toast.makeText(SignInPage.this, "Failed to update credits", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(SignInPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+            }
+        });
+    }
+
 }

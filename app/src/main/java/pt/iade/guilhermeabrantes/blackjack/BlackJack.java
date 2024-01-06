@@ -1,6 +1,14 @@
 package pt.iade.guilhermeabrantes.blackjack;
 
 import pt.iade.guilhermeabrantes.blackjack.models.Card;
+import pt.iade.guilhermeabrantes.blackjack.models.User;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.SessionApi;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,27 +28,33 @@ import android.widget.SeekBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class BlackJack extends AppCompatActivity {
     @SuppressLint({"MissingInflatedId"})
 
     private SeekBar creditsBar;
     private TextView betResult, totalCredits;
     private Button start, stand, standSplit, standSplit2, split, hit, ok, leave, hitSplit, hitSplit2;
-    private int playerBet, maxBet, clickerCounterHit, clickerCounterHitSplit, clickerCounterHitSplit2, pSumSplit, pSumSplit2;
+    private int playerBet, userId, userCredits, clickerCounterHit, clickerCounterHitSplit, clickerCounterHitSplit2, pSumSplit, pSumSplit2;
     private Boolean standSplitClicked, standSplit2Clicked;
+    User user = new User();
+    RetrofitService retrofitService = new RetrofitService();
+    Retrofit retrofit = retrofitService.getRetrofit();
+    UserApi userApi = retrofit.create(UserApi.class);
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        creditsBar = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
-
         List<Card> pHand = new ArrayList<>();
         List<Card> dHand = new ArrayList<>();
         List<Card> split1 = new ArrayList<>();
         List<Card> split2 = new ArrayList<>();
 
+        creditsBar = (SeekBar) findViewById(R.id.seekBarCreditsBJ);
         start = (Button) findViewById(R.id.btnStartBJ);
         stand = (Button) findViewById(R.id.btnStand);
         standSplit = (Button) findViewById(R.id.btnStandSplit1);
@@ -115,11 +130,18 @@ public class BlackJack extends AppCompatActivity {
         linearSplit1.setVisibility(View.GONE);
         linearSplit2.setVisibility(View.GONE);
 
-        maxBet = creditsBar.getMax();
+        userCredits = creditsBar.getMax();
+
+        Intent intent = getIntent();
+        int userId = intent.getIntExtra("userId", 0);
+        userCredits = intent.getIntExtra("userCredits", 0);
+
+        loadUserData();
+        updateTotalCredits(userCredits);
 
         creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
+            public void onProgressChanged(SeekBar seekBar,int credits, boolean b) {
                 betResult.setText("Apostar: " + credits);
             }
 
@@ -129,13 +151,13 @@ public class BlackJack extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                betResult.setText("Apostar: " + seekBar.getProgress());
                 playerBet = seekBar.getProgress();
-                seekBar.setMax(maxBet);
+                seekBar.setMax(userCredits);
             }
         });
 
         leave.setOnClickListener(v -> {
+            saveUpdatedCredits(userId, userCredits);
             startActivity(new Intent(BlackJack.this, FrontPage.class));
         });
 
@@ -148,7 +170,7 @@ public class BlackJack extends AppCompatActivity {
             pSumSplit = 0;
             pSumSplit2 = 0;
 
-            if (playerBet == 0 || playerBet > maxBet) {
+            if (playerBet == 0 || playerBet > userCredits) {
                 Toast.makeText(BlackJack.this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -161,8 +183,7 @@ public class BlackJack extends AppCompatActivity {
             betResult.setVisibility(View.GONE);
             creditsBar.setVisibility(View.GONE);
 
-            maxBet -= playerBet;
-            totalCredits.setText("Créditos: " + String.valueOf(maxBet));
+            userCredits -= playerBet;
 
             Card first = new Card();
             Card second = new Card();
@@ -260,16 +281,16 @@ public class BlackJack extends AppCompatActivity {
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                maxBet += 2 * playerBet;
+                totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                userCredits += 2 * playerBet;
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                maxBet += 2 * playerBet;
+                totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                userCredits += 2 * playerBet;
             } else if (pSum == dSum) {
                 Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                maxBet += playerBet;
+                totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
+                userCredits += playerBet;
             } else {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
@@ -290,8 +311,8 @@ public class BlackJack extends AppCompatActivity {
             linearPlayer.setVisibility(View.GONE);
             playerPoints.setVisibility(View.GONE);
 
-            maxBet -= playerBet;
-            totalCredits.setText("Créditos: " + String.valueOf(maxBet));
+            userCredits -= playerBet;
+            totalCredits.setText("Créditos: " + String.valueOf(userCredits));
 
             if (pHand.size() == 2 && pHand.get(0).getRank() == pHand.get(1).getRank()) {
                 split1.add(pHand.get(0));
@@ -393,25 +414,25 @@ public class BlackJack extends AppCompatActivity {
 
                     if (dSum > 21) {
                         Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
-                        totalCredits.setText("Créditos: " + String.valueOf(maxBet + (4 * playerBet)));
-                        maxBet += 4 * playerBet;
+                        totalCredits.setText("Créditos: " + String.valueOf(userCredits + (4 * playerBet)));
+                        userCredits += 4 * playerBet;
                     } else {
                         if (dSum == pSumSplit) {
                             Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                            maxBet += playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
+                            userCredits += playerBet;
                         } else if (dSum == pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                            maxBet += playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
+                            userCredits += playerBet;
                         } else if (dSum < pSumSplit) {
                             Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                            maxBet += 2 * playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                            userCredits += 2 * playerBet;
                         } else if (dSum < pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                            maxBet += 2 * playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                            userCredits += 2 * playerBet;
                         } else if (dSum > pSumSplit) {
                             Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
                         } else if (dSum > pSumSplit2) {
@@ -495,25 +516,25 @@ public class BlackJack extends AppCompatActivity {
 
                     if (dSum > 21) {
                         Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
-                        totalCredits.setText("Créditos: " + String.valueOf(maxBet + (4 * playerBet)));
-                        maxBet += 4 * playerBet;
+                        totalCredits.setText("Créditos: " + String.valueOf(userCredits + (4 * playerBet)));
+                        userCredits += 4 * playerBet;
                     } else {
                         if (dSum == pSumSplit) {
                             Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                            maxBet += playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
+                            userCredits += playerBet;
                         } else if (dSum == pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                            maxBet += playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
+                            userCredits += playerBet;
                         } else if (dSum < pSumSplit) {
                             Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                            maxBet += 2 * playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                            userCredits += 2 * playerBet;
                         } else if (dSum < pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                            maxBet += 2 * playerBet;
+                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
+                            userCredits += 2 * playerBet;
                         } else if (dSum > pSumSplit) {
                             Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
                         } else if (dSum > pSumSplit2) {
@@ -829,6 +850,54 @@ public class BlackJack extends AppCompatActivity {
             sum -= aces * 10;
         }
         return sum;
+    }
+    private void updateTotalCredits(int credits) {
+        // Atualize o texto da TextView com os créditos do usuário
+        totalCredits.setText("Credits: " + credits);
+    }
+    private void saveUpdatedCredits(int userId, int credits) {
+        User user = new User();
+        user.setId(userId);
+        user.setCredits(credits);
+
+        userApi.save(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                } else {
+                    Toast.makeText(BlackJack.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(BlackJack.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(BlackJack.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+            }
+        });
+    }
+
+    private void loadUserData() {
+        UserApi userApi = retrofit.create(UserApi.class);
+                userApi.getUserById(userId).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            User user = response.body();
+                            int userCredits = user.getCredits();
+
+                            updateTotalCredits(userCredits);
+                        } else {
+                            Toast.makeText(BlackJack.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(BlackJack.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                        Logger.getLogger(BlackJack.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                    }
+                });
     }
 }
 

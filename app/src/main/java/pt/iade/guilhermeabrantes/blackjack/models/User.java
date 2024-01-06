@@ -63,9 +63,8 @@ public class User implements Serializable {
     public int getCredits() {
         return credits;
     }
-
-    public void setCredits(int creditos) {
-        this.credits = creditos;
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
     @Override
