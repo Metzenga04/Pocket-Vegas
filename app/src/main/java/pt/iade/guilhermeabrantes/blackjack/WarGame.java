@@ -126,6 +126,8 @@ public class WarGame extends AppCompatActivity {
 
         ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                saveUpdatedCredits();
+
                 leaveTable.setVisibility(View.VISIBLE);
                 totalCredits.setVisibility(View.VISIBLE);
                 start.setVisibility(View.VISIBLE);
@@ -145,7 +147,7 @@ public class WarGame extends AppCompatActivity {
 
         deal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                leaveTable.setVisibility(View.VISIBLE);
+                leaveTable.setVisibility(View.GONE);
                 totalCredits.setVisibility(View.VISIBLE);
                 iv_card_left.setVisibility(View.VISIBLE);
                 iv_card_right.setVisibility(View.VISIBLE);
@@ -164,7 +166,6 @@ public class WarGame extends AppCompatActivity {
         });
         leaveTable.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                saveUpdatedCredits();
                 Intent intentLeave = new Intent(WarGame.this, FrontPage.class);
                 intentLeave.putExtra("userId", userId);
                 intentLeave.putExtra("userCredits", userCredits);

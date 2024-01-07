@@ -165,7 +165,6 @@ public class BlackJack extends AppCompatActivity {
         });
 
         leave.setOnClickListener(v -> {
-            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
             Intent intentleave = new Intent(BlackJack.this, FrontPage.class);
             intentleave.putExtra("userId", userId);
             intentleave.putExtra("userCredits", userCredits);
@@ -434,26 +433,16 @@ public class BlackJack extends AppCompatActivity {
                         userCredits += 4 * playerBet;
                         updateTotalCredits(userCredits);
                     } else {
-                        if (dSum == pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
+                        if (dSum == pSumSplit || dSum == pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
                             userCredits += playerBet;
                             updateTotalCredits(userCredits);
-                        } else if (dSum == pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            userCredits += playerBet;
-                            updateTotalCredits(userCredits);
-                        } else if (dSum < pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum < pSumSplit || dSum < pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Win one hand!", Toast.LENGTH_SHORT).show();
                             userCredits += 2 * playerBet;
                             updateTotalCredits(userCredits);
-                        } else if (dSum < pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            userCredits += 2 * playerBet;
-                            updateTotalCredits(userCredits);
-                        } else if (dSum > pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
-                        } else if (dSum > pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Lose second hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum > pSumSplit || dSum > pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Lose one hand!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -536,26 +525,16 @@ public class BlackJack extends AppCompatActivity {
                         userCredits += 4 * playerBet;
                         updateTotalCredits(userCredits);
                     } else {
-                        if (dSum == pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
+                        if (dSum == pSumSplit || dSum == pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
                             userCredits += playerBet;
                             updateTotalCredits(userCredits);
-                        } else if (dSum == pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            userCredits += playerBet;
-                            updateTotalCredits(userCredits);
-                        } else if (dSum < pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum < pSumSplit || dSum < pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Win one hand!", Toast.LENGTH_SHORT).show();
                             userCredits += 2 * playerBet;
                             updateTotalCredits(userCredits);
-                        } else if (dSum < pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            userCredits += 2 * playerBet;
-                            updateTotalCredits(userCredits);
-                        } else if (dSum > pSumSplit) {
-                            Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
-                        } else if (dSum > pSumSplit2) {
-                            Toast.makeText(BlackJack.this, "Lose second hand! Dealer wins!", Toast.LENGTH_SHORT).show();
+                        } else if (dSum > pSumSplit || dSum > pSumSplit2) {
+                            Toast.makeText(BlackJack.this, "Lose one hand!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -807,7 +786,7 @@ public class BlackJack extends AppCompatActivity {
         });
 
         ok.setOnClickListener(v -> {
-            Toast.makeText(this, "BlackJack", Toast.LENGTH_SHORT).show();
+            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
 
             split1.clear();
             split2.clear();

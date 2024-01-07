@@ -83,7 +83,12 @@ public class SignUpPage extends AppCompatActivity {
                         .enqueue(new Callback<User>() {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
-                                Toast.makeText(SignUpPage.this,"Save Successful!", Toast.LENGTH_SHORT).show();
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(SignUpPage.this, "Save Successful!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(SignUpPage.this, SignInPage.class));
+                                } else {
+                                    Toast.makeText(SignUpPage.this, "Save Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
@@ -92,8 +97,6 @@ public class SignUpPage extends AppCompatActivity {
                                 Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE,"Error Occurred",t);
                             }
                         });
-
-                startActivity(new Intent(SignUpPage.this, SignInPage.class));
             }
 
 

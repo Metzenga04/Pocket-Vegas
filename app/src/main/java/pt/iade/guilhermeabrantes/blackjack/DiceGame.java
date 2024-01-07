@@ -131,7 +131,6 @@ public class DiceGame extends AppCompatActivity {
         });
 
         leave.setOnClickListener(v -> {
-            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
             Intent intentLeave = new Intent(DiceGame.this, FrontPage.class);
             intentLeave.putExtra("userId", userId);
             intentLeave.putExtra("userCredits", userCredits);
@@ -312,7 +311,7 @@ public class DiceGame extends AppCompatActivity {
         });
 
         ok.setOnClickListener(v -> {
-            Toast.makeText(this, "Dice Game", Toast.LENGTH_SHORT).show();
+            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
 
             pHand.clear();
             dHand.clear();

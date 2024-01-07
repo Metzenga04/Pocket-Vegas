@@ -107,178 +107,188 @@ public class FrontPage extends AppCompatActivity {
                         .enqueue(new Callback<Session>() {
                             @Override
                             public void onResponse(Call<Session> call, Response<Session> response) {
-                                Toast.makeText(FrontPage.this, "Welcome to Black Jack.", Toast.LENGTH_SHORT).show();
+                                if (response.isSuccessful()) {
+                                    Session createdSession = response.body();
+                                    if (createdSession != null && createdSession.getId() !=0) {
+                                        int userId = createdSession.getId();
+                                        Toast.makeText(FrontPage.this, "Welcome to Black Jack.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(FrontPage.this, "Error: Unable to retrieve user ID", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(FrontPage.this, "Server responded with error", Toast.LENGTH_SHORT).show();
+                                }
                             }
-
                             @Override
                             public void onFailure(Call<Session> call, Throwable t) {
-                                Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FrontPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
 
-
-                userApi.getUserById(userId).enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            User detailedUser = response.body();
-                            userCredits = detailedUser.getCredits();
-                            userEmail = detailedUser.getEmail();
-                            userPassword = detailedUser.getPassword();
-                            userName = detailedUser.getName();
-                            userSurname = detailedUser.getSurname();
-                            navigateToBlackjack();
-                        } else {
-                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
-                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
-                    }
-                });
-            }
-        });
-        btnPlayWar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Session session = new Session();
-                sessionApi.save(session)
-                        .enqueue(new Callback<Session>() {
+                        userApi.getUserById(userId).enqueue(new Callback<User>() {
                             @Override
-                            public void onResponse(Call<Session> call, Response<Session> response) {
-                                Toast.makeText(FrontPage.this, "Welcome to War Game.", Toast.LENGTH_SHORT).show();
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    User detailedUser = response.body();
+                                    userCredits = detailedUser.getCredits();
+                                    userEmail = detailedUser.getEmail();
+                                    userPassword = detailedUser.getPassword();
+                                    userName = detailedUser.getName();
+                                    userSurname = detailedUser.getSurname();
+                                    navigateToBlackjack();
+                                } else {
+                                    Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
-                            public void onFailure(Call<Session> call, Throwable t) {
+                            public void onFailure(Call<User> call, Throwable t) {
+                                Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                                Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                            }
+                        });
+                    }
+                });
+                btnPlayWar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Session session = new Session();
+                        sessionApi.save(session)
+                                .enqueue(new Callback<Session>() {
+                                    @Override
+                                    public void onResponse(Call<Session> call, Response<Session> response) {
+                                        Toast.makeText(FrontPage.this, "Welcome to War Game.", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Session> call, Throwable t) {
+                                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                                    }
+                                });
+                        userApi.getUserById(userId).enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    User detailedUser = response.body();
+                                    userCredits = detailedUser.getCredits();
+                                    userEmail = detailedUser.getEmail();
+                                    userPassword = detailedUser.getPassword();
+                                    userName = detailedUser.getName();
+                                    userSurname = detailedUser.getSurname();
+                                    navigateToWarGame();
+                                } else {
+                                    Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
                                 Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
-                userApi.getUserById(userId).enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            User detailedUser = response.body();
-                            userCredits = detailedUser.getCredits();
-                            userEmail = detailedUser.getEmail();
-                            userPassword = detailedUser.getPassword();
-                            userName = detailedUser.getName();
-                            userSurname = detailedUser.getSurname();
-                            navigateToWarGame();
-                        } else {
-                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
-                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                     }
                 });
-            }
-        });
-        btnPlayDice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Session session = new Session();
-                sessionApi.save(session)
-                        .enqueue(new Callback<Session>() {
+                btnPlayDice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Session session = new Session();
+                        sessionApi.save(session)
+                                .enqueue(new Callback<Session>() {
+                                    @Override
+                                    public void onResponse(Call<Session> call, Response<Session> response) {
+                                        Toast.makeText(FrontPage.this, "Welcome to Dice Game.", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Session> call, Throwable t) {
+                                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                                    }
+                                });
+                        userApi.getUserById(userId).enqueue(new Callback<User>() {
                             @Override
-                            public void onResponse(Call<Session> call, Response<Session> response) {
-                                Toast.makeText(FrontPage.this, "Welcome to Dice Game.", Toast.LENGTH_SHORT).show();
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    User detailedUser = response.body();
+                                    userCredits = detailedUser.getCredits();
+                                    userEmail = detailedUser.getEmail();
+                                    userPassword = detailedUser.getPassword();
+                                    userName = detailedUser.getName();
+                                    userSurname = detailedUser.getSurname();
+                                    navigateToDiceGame();
+                                } else {
+                                    Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
-                            public void onFailure(Call<Session> call, Throwable t) {
+                            public void onFailure(Call<User> call, Throwable t) {
                                 Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
-                userApi.getUserById(userId).enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            User detailedUser = response.body();
-                            userCredits = detailedUser.getCredits();
-                            userEmail = detailedUser.getEmail();
-                            userPassword = detailedUser.getPassword();
-                            userName = detailedUser.getName();
-                            userSurname = detailedUser.getSurname();
-                            navigateToDiceGame();
-                        } else {
-                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
-                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                     }
                 });
             }
-        });
-    }
-    private void navigateToBlackjack() {
-        Intent intent = new Intent(FrontPage.this, BlackJack.class);
-        intent.putExtra("userId", userId);
-        intent.putExtra("userCredits", userCredits);
-        intent.putExtra("userEmail", userEmail);
-        intent.putExtra("userPassword", userPassword);
-        intent.putExtra("userName", userName);
-        intent.putExtra("userSurname", userSurname);
-        FrontPage.this.startActivity(intent);
-    }
 
-    private void navigateToWarGame() {
-        Intent intent = new Intent(FrontPage.this, WarGame.class);
-        intent.putExtra("userId", userId);
-        intent.putExtra("userCredits", userCredits);
-        intent.putExtra("userEmail", userEmail);
-        intent.putExtra("userPassword", userPassword);
-        intent.putExtra("userName", userName);
-        intent.putExtra("userSurname", userSurname);
-        FrontPage.this.startActivity(intent);
-    }
+            private void navigateToBlackjack() {
+                Intent intent = new Intent(FrontPage.this, BlackJack.class);
+                intent.putExtra("userId", userId);
+                intent.putExtra("userCredits", userCredits);
+                intent.putExtra("userEmail", userEmail);
+                intent.putExtra("userPassword", userPassword);
+                intent.putExtra("userName", userName);
+                intent.putExtra("userSurname", userSurname);
+                FrontPage.this.startActivity(intent);
+            }
 
-    private void navigateToDiceGame() {
-        Intent intent = new Intent(FrontPage.this, DiceGame.class);
-        intent.putExtra("userId", userId);
-        intent.putExtra("userCredits", userCredits);
-        intent.putExtra("userEmail", userEmail);
-        intent.putExtra("userPassword", userPassword);
-        intent.putExtra("userName", userName);
-        intent.putExtra("userSurname", userSurname);
-        FrontPage.this.startActivity(intent);
-    }
+            private void navigateToWarGame() {
+                Intent intent = new Intent(FrontPage.this, WarGame.class);
+                intent.putExtra("userId", userId);
+                intent.putExtra("userCredits", userCredits);
+                intent.putExtra("userEmail", userEmail);
+                intent.putExtra("userPassword", userPassword);
+                intent.putExtra("userName", userName);
+                intent.putExtra("userSurname", userSurname);
+                FrontPage.this.startActivity(intent);
+            }
 
-    private void updateTotalCredits(int credits) {
-        // Atualize o texto da TextView com os créditos do usuário
-        playerCreditsTextView.setText("Credits: " + credits);
-    }
-    private void updateUserInfo(User detailedUser) {
-        userCredits = detailedUser.getCredits();
-        userEmail = detailedUser.getEmail();
-        userPassword = detailedUser.getPassword();
-        userName = detailedUser.getName();
-        userSurname = detailedUser.getSurname();
-    }
+            private void navigateToDiceGame() {
+                Intent intent = new Intent(FrontPage.this, DiceGame.class);
+                intent.putExtra("userId", userId);
+                intent.putExtra("userCredits", userCredits);
+                intent.putExtra("userEmail", userEmail);
+                intent.putExtra("userPassword", userPassword);
+                intent.putExtra("userName", userName);
+                intent.putExtra("userSurname", userSurname);
+                FrontPage.this.startActivity(intent);
+            }
 
-    private void leaveFrontPage() {
-        // Crie uma Intent para retornar dados, se necessário
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("resultKey", "dados de resultado, se necessário");
+            private void updateTotalCredits(int credits) {
+                // Atualize o texto da TextView com os créditos do usuário
+                playerCreditsTextView.setText("Credits: " + credits);
+            }
 
-        // Define o resultado da atividade como RESULT_OK e anexa a Intent de resultado
-        setResult(RESULT_OK, resultIntent);
+            private void updateUserInfo(User detailedUser) {
+                userCredits = detailedUser.getCredits();
+                userEmail = detailedUser.getEmail();
+                userPassword = detailedUser.getPassword();
+                userName = detailedUser.getName();
+                userSurname = detailedUser.getSurname();
+            }
 
-        // Finaliza a atividade
-        finish();
-    }
-}
+            private void leaveFrontPage() {
+                // Crie uma Intent para retornar dados, se necessário
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("resultKey", "dados de resultado, se necessário");
+
+                // Define o resultado da atividade como RESULT_OK e anexa a Intent de resultado
+                setResult(RESULT_OK, resultIntent);
+
+                // Finaliza a atividade
+                finish();
+            }
+        }
