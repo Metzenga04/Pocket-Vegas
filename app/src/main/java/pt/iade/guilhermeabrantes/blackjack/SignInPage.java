@@ -24,12 +24,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignInPage extends AppCompatActivity {
-
+    private static final int FRONT_PAGE_REQUEST_CODE = 1;
     private Button btnRegister;
     private Button btnSignIn;
     private EditText emailInputIn;
     private EditText passwordInputIn;
-    private int userId;
+    private int userId, userCredits;
+    private String userEmail, userPassword, userName,userSurname;
     RetrofitService retrofitService = new RetrofitService();
     Retrofit retrofit = retrofitService.getRetrofit();
     private UserApi userApi;
@@ -127,20 +128,31 @@ public class SignInPage extends AppCompatActivity {
         }
 
         if (loginSuccessful) {
-            navigateToNextActivity(user.getCredits(),user.getEmail(),user.getPassword(),user.getName(),user.getSurname());
+            loginUser();
         } else {
             // Credenciais inválidas ou lista de usuários nula
             Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
-    private void navigateToNextActivity(int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
+    private void loginUser() {
+
         Intent intent = new Intent(SignInPage.this, FrontPage.class);
-        intent.putExtra("userInfo", userId);
-        intent.putExtra("userCreditsFromSign", userCredits);
-        intent.putExtra("userEmailFromSign", userEmail);
-        intent.putExtra("userPasswordFromSign", userPassword);
-        intent.putExtra("userNameFromSign", userName);
-        intent.putExtra("userSurnameFromSign", userSurname);
-        SignInPage.this.startActivity(intent);
+        intent.putExtra("userId", userId);
+        intent.putExtra("userCredits", userCredits);
+        intent.putExtra("userEmail", userEmail);
+        intent.putExtra("userPassword", userPassword);
+        intent.putExtra("userName", userName);
+        intent.putExtra("userSurname", userSurname);
+
+        startActivityForResult(intent, FRONT_PAGE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == FRONT_PAGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            String resultData = data.getStringExtra("resultKey");
+        }
     }
 }

@@ -12,6 +12,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FrontPage extends AppCompatActivity {
+    private static final int BLACKJACK_REQUEST_CODE = 2;
     private Button btnLogOff;
     private Button btnPlayBlack;
     private Button btnPlayWar;
@@ -79,6 +81,7 @@ public class FrontPage extends AppCompatActivity {
                     playerCreditsTextView.setText("Credits: " + user.getCredits());
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(FrontPage.this, "Failed to get user data", Toast.LENGTH_SHORT).show();
@@ -91,6 +94,7 @@ public class FrontPage extends AppCompatActivity {
         btnLogOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                leaveFrontPage();
                 startActivity(new Intent(FrontPage.this, SignInPage.class));
 
             }
@@ -231,6 +235,7 @@ public class FrontPage extends AppCompatActivity {
         intent.putExtra("userSurname", userSurname);
         FrontPage.this.startActivity(intent);
     }
+
     private void navigateToWarGame() {
         Intent intent = new Intent(FrontPage.this, WarGame.class);
         intent.putExtra("userId", userId);
@@ -241,6 +246,7 @@ public class FrontPage extends AppCompatActivity {
         intent.putExtra("userSurname", userSurname);
         FrontPage.this.startActivity(intent);
     }
+
     private void navigateToDiceGame() {
         Intent intent = new Intent(FrontPage.this, DiceGame.class);
         intent.putExtra("userId", userId);
@@ -251,8 +257,28 @@ public class FrontPage extends AppCompatActivity {
         intent.putExtra("userSurname", userSurname);
         FrontPage.this.startActivity(intent);
     }
+
     private void updateTotalCredits(int credits) {
         // Atualize o texto da TextView com os créditos do usuário
         playerCreditsTextView.setText("Credits: " + credits);
+    }
+    private void updateUserInfo(User detailedUser) {
+        userCredits = detailedUser.getCredits();
+        userEmail = detailedUser.getEmail();
+        userPassword = detailedUser.getPassword();
+        userName = detailedUser.getName();
+        userSurname = detailedUser.getSurname();
+    }
+
+    private void leaveFrontPage() {
+        // Crie uma Intent para retornar dados, se necessário
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("resultKey", "dados de resultado, se necessário");
+
+        // Define o resultado da atividade como RESULT_OK e anexa a Intent de resultado
+        setResult(RESULT_OK, resultIntent);
+
+        // Finaliza a atividade
+        finish();
     }
 }

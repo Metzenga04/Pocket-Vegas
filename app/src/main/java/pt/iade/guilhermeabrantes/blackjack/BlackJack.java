@@ -303,7 +303,7 @@ public class BlackJack extends AppCompatActivity {
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
                 userCredits += 2 * playerBet;
-               updateTotalCredits(userCredits);
+                updateTotalCredits(userCredits);
             } else if (pSum == dSum) {
                 Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
                 userCredits += playerBet;
