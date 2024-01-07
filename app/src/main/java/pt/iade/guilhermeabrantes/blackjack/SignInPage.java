@@ -127,17 +127,20 @@ public class SignInPage extends AppCompatActivity {
         }
 
         if (loginSuccessful) {
-            navigateToNextActivity();
+            navigateToNextActivity(user.getCredits(),user.getEmail(),user.getPassword(),user.getName(),user.getSurname());
         } else {
             // Credenciais inválidas ou lista de usuários nula
             Toast.makeText(SignInPage.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
-    private void navigateToNextActivity() {
-        Toast.makeText(SignInPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+    private void navigateToNextActivity(int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
         Intent intent = new Intent(SignInPage.this, FrontPage.class);
         intent.putExtra("userInfo", userId);
+        intent.putExtra("userCreditsFromSign", userCredits);
+        intent.putExtra("userEmailFromSign", userEmail);
+        intent.putExtra("userPasswordFromSign", userPassword);
+        intent.putExtra("userNameFromSign", userName);
+        intent.putExtra("userSurnameFromSign", userSurname);
         SignInPage.this.startActivity(intent);
     }
-
 }

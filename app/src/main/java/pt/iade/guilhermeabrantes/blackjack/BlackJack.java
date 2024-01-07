@@ -174,18 +174,7 @@ public class BlackJack extends AppCompatActivity {
             intentleave.putExtra("userName", userName);
             intentleave.putExtra("userSurname", userSurname);
 
-            startActivity(intentleave);
-            saveUserInfoToSharedPreferences(userId, userCredits, userEmail, userPassword, userName, userSurname);
-
-            retrieveUserInfoFromSharedPreferences();
-
-            startActivity(new Intent(BlackJack.this, FrontPage.class)
-                    .putExtra("userId", userId)
-                    .putExtra("userCredits", userCredits)
-                    .putExtra("userEmail", userEmail)
-                    .putExtra("userPassword", userPassword)
-                    .putExtra("userName", userName)
-                    .putExtra("userSurname", userSurname));
+            BlackJack.this.startActivity(intentleave);
         });
 
         start.setOnClickListener(v -> {
@@ -309,16 +298,16 @@ public class BlackJack extends AppCompatActivity {
 
             if (dSum > 21) {
                 Toast.makeText(BlackJack.this, "Dealer busted. You win!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                 userCredits += 2 * playerBet;
+                updateTotalCredits(userCredits);
             } else if (pSum > dSum) {
                 Toast.makeText(BlackJack.this, "You win!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                 userCredits += 2 * playerBet;
+               updateTotalCredits(userCredits);
             } else if (pSum == dSum) {
                 Toast.makeText(BlackJack.this, "Dead end!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
                 userCredits += playerBet;
+                updateTotalCredits(userCredits);
             } else {
                 Toast.makeText(BlackJack.this, "Dealer Wins!", Toast.LENGTH_SHORT).show();
             }
@@ -442,25 +431,25 @@ public class BlackJack extends AppCompatActivity {
 
                     if (dSum > 21) {
                         Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
-                        totalCredits.setText("Créditos: " + String.valueOf(userCredits + (4 * playerBet)));
                         userCredits += 4 * playerBet;
+                        updateTotalCredits(userCredits);
                     } else {
                         if (dSum == pSumSplit) {
                             Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
                             userCredits += playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum == pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
                             userCredits += playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum < pSumSplit) {
                             Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                             userCredits += 2 * playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum < pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                             userCredits += 2 * playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum > pSumSplit) {
                             Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
                         } else if (dSum > pSumSplit2) {
@@ -544,25 +533,25 @@ public class BlackJack extends AppCompatActivity {
 
                     if (dSum > 21) {
                         Toast.makeText(BlackJack.this, "Dealer busted! You win!", Toast.LENGTH_SHORT).show();
-                        totalCredits.setText("Créditos: " + String.valueOf(userCredits + (4 * playerBet)));
                         userCredits += 4 * playerBet;
+                        updateTotalCredits(userCredits);
                     } else {
                         if (dSum == pSumSplit) {
                             Toast.makeText(BlackJack.this, "Dead end first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
                             userCredits += playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum == pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Dead end second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + playerBet));
                             userCredits += playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum < pSumSplit) {
                             Toast.makeText(BlackJack.this, "Win first hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                             userCredits += 2 * playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum < pSumSplit2) {
                             Toast.makeText(BlackJack.this, "Win second hand!", Toast.LENGTH_SHORT).show();
-                            totalCredits.setText("Créditos: " + String.valueOf(userCredits + (2 * playerBet)));
                             userCredits += 2 * playerBet;
+                            updateTotalCredits(userCredits);
                         } else if (dSum > pSumSplit) {
                             Toast.makeText(BlackJack.this, "Lose first hand! Dealer wins!", Toast.LENGTH_SHORT).show();
                         } else if (dSum > pSumSplit2) {
@@ -578,6 +567,7 @@ public class BlackJack extends AppCompatActivity {
         });
 
         hit.setOnClickListener(v -> {
+            split.setVisibility(View.GONE);
             clickerCounterHit++;
 
             Card toAdd = new Card();
@@ -597,7 +587,6 @@ public class BlackJack extends AppCompatActivity {
                 case 4:
                     newCard = card6;
                     hit.setVisibility(View.GONE);
-                    split.setVisibility(View.GONE);
                     break;
             }
 
@@ -880,7 +869,6 @@ public class BlackJack extends AppCompatActivity {
         return sum;
     }
     private void updateTotalCredits(int credits) {
-        // Atualize o texto da TextView com os créditos do usuário
         totalCredits.setText("Credits: " + credits);
     }
     private void saveUpdatedCredits(int userId, int credits, String email, String password, String name, String surname) {
@@ -908,30 +896,6 @@ public class BlackJack extends AppCompatActivity {
             }
         });
     }
-    private void saveUserInfoToSharedPreferences(int userId, int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
-        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putInt("userId", userId);
-        editor.putInt("userCredits", userCredits);
-        editor.putString("userEmail", userEmail);
-        editor.putString("userPassword", userPassword);
-        editor.putString("userName", userName);
-        editor.putString("userSurname", userSurname);
-
-        editor.apply();
-    }
-
-    private void retrieveUserInfoFromSharedPreferences() {
-        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        userId = preferences.getInt("userId", 0);
-        userCredits = preferences.getInt("userCredits", 0);
-        userEmail = preferences.getString("userEmail", "");
-        userPassword = preferences.getString("userPassword", "");
-        userName = preferences.getString("userName", "");
-        userSurname = preferences.getString("userSurname", "");
-    }
-
 }
 
 

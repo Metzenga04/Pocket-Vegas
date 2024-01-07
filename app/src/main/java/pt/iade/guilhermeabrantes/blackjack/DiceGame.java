@@ -1,11 +1,19 @@
 package pt.iade.guilhermeabrantes.blackjack;
 
 import pt.iade.guilhermeabrantes.blackjack.models.Dices;
+import pt.iade.guilhermeabrantes.blackjack.models.User;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.RetrofitService;
+import pt.iade.guilhermeabrantes.blackjack.retrofit.UserApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,13 +30,20 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DiceGame extends AppCompatActivity {
 
     private Button roll, leave, start, stay, ok;
     private SeekBar creditsBar;
     private TextView betResult, totalCredits;
-    private int playerBet, maxBet, clickCounter;
+    private int playerBet, clickCounter,userCredits, userId;
+    private String userEmail, userPassword, userName, userSurname;
+    RetrofitService retrofitService = new RetrofitService();
+    Retrofit retrofit = retrofitService.getRetrofit();
+    UserApi userApi = retrofit.create(UserApi.class);
+    User user = new User();
     List<Dices> pHand = new ArrayList<>();
     List<Dices> dHand = new ArrayList<>();
     @SuppressLint("MissingInflatedId")
@@ -84,12 +99,22 @@ public class DiceGame extends AppCompatActivity {
         dDice4.setVisibility(View.GONE);
         dDice5.setVisibility(View.GONE);
 
-        maxBet = creditsBar.getMax();
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("userId", 0);
+        userCredits = intent.getIntExtra("userCredits", 0);
+        userEmail = intent.getStringExtra("userEmail");
+        userPassword = intent.getStringExtra("userPassword");
+        userName = intent.getStringExtra("userName");
+        userSurname = intent.getStringExtra("userSurname");
+
+        updateTotalCredits(userCredits);
+        creditsBar.setMax(userCredits);
+
 
         creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
-                betResult.setText("Apostar: " + credits);
+                betResult.setText("Bet: " + credits);
             }
 
             @Override
@@ -99,18 +124,27 @@ public class DiceGame extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                betResult.setText("Apostar: " + seekBar.getProgress());
+                betResult.setText("Bet: " + seekBar.getProgress());
                 playerBet = seekBar.getProgress();
-                seekBar.setMax(maxBet);
+                seekBar.setMax(userCredits);
             }
         });
 
         leave.setOnClickListener(v -> {
-            startActivity(new Intent(DiceGame.this, FrontPage.class));
+            saveUpdatedCredits(userId, userCredits, userEmail, userPassword, userName, userSurname);
+            Intent intentLeave = new Intent(DiceGame.this, FrontPage.class);
+            intentLeave.putExtra("userId", userId);
+            intentLeave.putExtra("userCredits", userCredits);
+            intentLeave.putExtra("userEmail", userEmail);
+            intentLeave.putExtra("userPassword", userPassword);
+            intentLeave.putExtra("userName", userName);
+            intentLeave.putExtra("userSurname", userSurname);
+
+            DiceGame.this.startActivity(intentLeave);
         });
 
         start.setOnClickListener(v -> {
-            if (playerBet == 0 || playerBet > maxBet) {
+            if (playerBet == 0 || playerBet > userCredits) {
                 Toast.makeText(this, "Invalid Bet!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -122,8 +156,8 @@ public class DiceGame extends AppCompatActivity {
             creditsBar.setVisibility(View.GONE);
 
             clickCounter = 0;
-            maxBet -= playerBet;
-            totalCredits.setText("Créditos: " + String.valueOf(maxBet));
+            userCredits -= playerBet;
+            updateTotalCredits(userCredits);
         });
 
         stay.setOnClickListener(v -> {
@@ -222,12 +256,12 @@ public class DiceGame extends AppCompatActivity {
 
             if (pSum > dSum) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(maxBet + (2 * playerBet)));
-                maxBet += 2 * playerBet;
+                userCredits += 2 * playerBet;
+                updateTotalCredits(userCredits);
             } else if (pSum == dSum){
                 Toast.makeText(this, "Dead End!", Toast.LENGTH_SHORT).show();
-                totalCredits.setText("Créditos: " + String.valueOf(maxBet + playerBet));
-                maxBet += playerBet;
+                userCredits += playerBet;
+                updateTotalCredits(userCredits);
             }else{
                 Toast.makeText(this, "You Lose", Toast.LENGTH_SHORT).show();
             }
@@ -419,5 +453,33 @@ public class DiceGame extends AppCompatActivity {
             sum += hand.get(i).getRank();
         }
         return sum;
+    }
+    private void updateTotalCredits(int credits) {
+        totalCredits.setText("Credits: " + credits);
+    }
+    private void saveUpdatedCredits(int userId, int credits, String email, String password, String name, String surname) {
+        User user = new User();
+        user.setId(userId);
+        user.setCredits(credits);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setName(name);
+        user.setSurname(surname);
+
+        userApi.save(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                } else {
+                    Toast.makeText(DiceGame.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(DiceGame.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(DiceGame.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+            }
+        });
     }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ public class WarGame extends AppCompatActivity {
     private Deck deck;
     private SeekBar creditsBar;
     private int leftScore, rightScore, playerBet, userCredits, userId;
+    private String userEmail, userPassword, userName, userSurname;
     RetrofitService retrofitService = new RetrofitService();
     Retrofit retrofit = retrofitService.getRetrofit();
     UserApi userApi = retrofit.create(UserApi.class);
@@ -75,17 +77,22 @@ public class WarGame extends AppCompatActivity {
         Intent intent = getIntent();
         userId = intent.getIntExtra("userId", 0);
         userCredits = intent.getIntExtra("userCredits", 0);
+        userEmail = intent.getStringExtra("userEmail");
+        userPassword = intent.getStringExtra("userPassword");
+        userName = intent.getStringExtra("userName");
+        userSurname = intent.getStringExtra("userSurname");
+
+        updateTotalCredits(userCredits);
 
         creditsBar.setMax(userCredits);
         creditsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int credits, boolean b) {
-                betResult.setText("Apostar: " + credits);
+                betResult.setText("Bet: " + credits);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
             public void onStopTrackingTouch(SeekBar seekBar) {
-                betResult.setText("Apostar: " + seekBar.getProgress());
+                betResult.setText("Bet: " + seekBar.getProgress());
                 playerBet = seekBar.getProgress();
                 seekBar.setMax(userCredits);
             }
@@ -97,7 +104,7 @@ public class WarGame extends AppCompatActivity {
                     return;
                 }
 
-                leaveTable.setVisibility(View.VISIBLE);
+                leaveTable.setVisibility(View.GONE);
                 totalCredits.setVisibility(View.VISIBLE);
                 iv_card_left.setVisibility(View.VISIBLE);
                 iv_card_right.setVisibility(View.VISIBLE);
@@ -132,6 +139,7 @@ public class WarGame extends AppCompatActivity {
                 pCredits.setVisibility(View.GONE);
                 cCredits.setVisibility(View.GONE);
                 ok.setVisibility(View.GONE);
+
             }
         });
 
@@ -156,7 +164,16 @@ public class WarGame extends AppCompatActivity {
         });
         leaveTable.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(WarGame.this,FrontPage.class));
+                saveUpdatedCredits();
+                Intent intentLeave = new Intent(WarGame.this, FrontPage.class);
+                intentLeave.putExtra("userId", userId);
+                intentLeave.putExtra("userCredits", userCredits);
+                intentLeave.putExtra("userEmail", userEmail);
+                intentLeave.putExtra("userPassword", userPassword);
+                intentLeave.putExtra("userName", userName);
+                intentLeave.putExtra("userSurname", userSurname);
+                WarGame.this.startActivity(intentLeave);
+
             }
         });
     }
@@ -190,48 +207,33 @@ public class WarGame extends AppCompatActivity {
             updateTotalCredits(userCredits);
             Toast.makeText(this, "Tie!", Toast.LENGTH_SHORT).show();
         }
-        updateUserCredits(userCredits);
     }
     private void updateTotalCredits(int credits) {
         totalCredits.setText("Credits: " + credits);
     }
-    private void updateUserCredits(int newCredits) {
+    private void saveUpdatedCredits() {
         User user = new User();
         user.setId(userId);
-        user.setCredits(newCredits);
+        user.setCredits(userCredits);
+        user.setEmail(userEmail);
+        user.setPassword(userPassword);
+        user.setName(userName);
+        user.setSurname(userSurname);
 
         userApi.save(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                Toast.makeText(WarGame.this, "Créditos atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(WarGame.this, "Falha ao atualizar os créditos do usuário", Toast.LENGTH_SHORT).show();
-                Logger.getLogger(WarGame.class.getName()).log(Level.SEVERE, "Erro ocorrido", t);
-            }
-        });
-    }
-    private void getUserDetailsAndUpdateUI() {
-        Call<User> call = userApi.getUserDetailsById(userId);
-
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    User user = response.body();
-                    if (user != null) {
-                        // Atualiza os créditos do usuário na UI
-                        updateTotalCredits(user.getCredits());
-                    }
+                    Toast.makeText(WarGame.this, "Success!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(WarGame.this, "Erro ao obter detalhes do usuário", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WarGame.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(WarGame.this, "Falha ao obter detalhes do usuário", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WarGame.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(WarGame.class.getName()).log(Level.SEVERE, "Error Occurred", t);
             }
         });
     }

@@ -50,6 +50,16 @@ public class FrontPage extends AppCompatActivity {
         btnPlayDice = (Button) findViewById(R.id.btnDgPlay);
         playerCreditsTextView = (TextView) findViewById(R.id.playerCreditsTextView);
 
+        RetrofitService retrofitService = new RetrofitService();
+        userApi = retrofitService.getRetrofit().create(UserApi.class);
+
+        userId = getIntent().getIntExtra("userInfo", 0);
+        userCredits = getIntent().getIntExtra("userCreditsFromSign", 0);
+        userEmail = getIntent().getStringExtra("userEmailFromSign");
+        userPassword = getIntent().getStringExtra("userPasswordFromSign");
+        userName = getIntent().getStringExtra("userNameFromSign");
+        userSurname = getIntent().getStringExtra("userSurnameFromSign");
+
         if (getIntent().hasExtra("userId")) {
             userId = getIntent().getIntExtra("userId", 0);
             userCredits = getIntent().getIntExtra("userCredits", 0);
@@ -58,20 +68,15 @@ public class FrontPage extends AppCompatActivity {
             userName = getIntent().getStringExtra("userName");
             userSurname = getIntent().getStringExtra("userSurname");
 
-            // Atualiza a interface do usuário com os novos dados
             updateTotalCredits(userCredits);
         }
 
-        RetrofitService retrofitService = new RetrofitService();
-        userApi = retrofitService.getRetrofit().create(UserApi.class);
-
-        userId = getIntent().getIntExtra("userInfo", 0);
         userApi.getUserById(userId).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    playerCreditsTextView.setText("Crédits: " + user.getCredits());
+                    playerCreditsTextView.setText("Credits: " + user.getCredits());
                 }
             }
             @Override
@@ -108,15 +113,18 @@ public class FrontPage extends AppCompatActivity {
                             }
                         });
 
-                RetrofitService retrofitService = new RetrofitService();
-                userApi = retrofitService.getRetrofit().create(UserApi.class);
-                int userId = getIntent().getIntExtra("userInfo", 0);
+
                 userApi.getUserById(userId).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
                             User detailedUser = response.body();
-                            navigateToBlackjackActivity(userId, detailedUser.getCredits(),detailedUser.getEmail(),detailedUser.getPassword(),detailedUser.getName(),detailedUser.getSurname());
+                            userCredits = detailedUser.getCredits();
+                            userEmail = detailedUser.getEmail();
+                            userPassword = detailedUser.getPassword();
+                            userName = detailedUser.getName();
+                            userSurname = detailedUser.getSurname();
+                            navigateToBlackjack();
                         } else {
                             Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
                         }
@@ -147,7 +155,28 @@ public class FrontPage extends AppCompatActivity {
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
-                startActivity(new Intent(FrontPage.this, WarGame.class));
+                userApi.getUserById(userId).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            User detailedUser = response.body();
+                            userCredits = detailedUser.getCredits();
+                            userEmail = detailedUser.getEmail();
+                            userPassword = detailedUser.getPassword();
+                            userName = detailedUser.getName();
+                            userSurname = detailedUser.getSurname();
+                            navigateToWarGame();
+                        } else {
+                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                    }
+                });
             }
         });
         btnPlayDice.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +196,53 @@ public class FrontPage extends AppCompatActivity {
                                 Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
                             }
                         });
-                startActivity(new Intent(FrontPage.this, DiceGame.class));
+                userApi.getUserById(userId).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            User detailedUser = response.body();
+                            userCredits = detailedUser.getCredits();
+                            userEmail = detailedUser.getEmail();
+                            userPassword = detailedUser.getPassword();
+                            userName = detailedUser.getName();
+                            userSurname = detailedUser.getSurname();
+                            navigateToDiceGame();
+                        } else {
+                            Toast.makeText(FrontPage.this, "Failed to load user details", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(FrontPage.this, "Oops,something went wrong!", Toast.LENGTH_SHORT).show();
+                        Logger.getLogger(FrontPage.class.getName()).log(Level.SEVERE, "Error Occurred", t);
+                    }
+                });
             }
         });
     }
-    private void navigateToBlackjackActivity(int userId, int userCredits, String userEmail, String userPassword, String userName, String userSurname) {
+    private void navigateToBlackjack() {
         Intent intent = new Intent(FrontPage.this, BlackJack.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("userCredits", userCredits);
+        intent.putExtra("userEmail", userEmail);
+        intent.putExtra("userPassword", userPassword);
+        intent.putExtra("userName", userName);
+        intent.putExtra("userSurname", userSurname);
+        FrontPage.this.startActivity(intent);
+    }
+    private void navigateToWarGame() {
+        Intent intent = new Intent(FrontPage.this, WarGame.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("userCredits", userCredits);
+        intent.putExtra("userEmail", userEmail);
+        intent.putExtra("userPassword", userPassword);
+        intent.putExtra("userName", userName);
+        intent.putExtra("userSurname", userSurname);
+        FrontPage.this.startActivity(intent);
+    }
+    private void navigateToDiceGame() {
+        Intent intent = new Intent(FrontPage.this, DiceGame.class);
         intent.putExtra("userId", userId);
         intent.putExtra("userCredits", userCredits);
         intent.putExtra("userEmail", userEmail);
