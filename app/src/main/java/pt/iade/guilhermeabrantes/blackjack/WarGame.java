@@ -225,7 +225,6 @@ public class WarGame extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(WarGame.this, "Success!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(WarGame.this, "Failed to save credits", Toast.LENGTH_SHORT).show();
                 }
